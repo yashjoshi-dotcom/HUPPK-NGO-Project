@@ -1,12 +1,32 @@
 
 import { Tabs } from 'expo-router';
 import { FontAwesome } from '@expo/vector-icons';
+import { useTheme } from '../../hooks';
+import { Pressable } from 'react-native';
 
 export default function TabLayout() {
+  const {theme,toggleTheme} = useTheme();
   return (
     <Tabs
       screenOptions={{
         headerShown: true, // You can set this to false if you don't want a header
+        tabBarStyle: theme.tabBarStyle,
+        headerStyle: {
+          backgroundColor: theme.headerStyle.backgroundColor || '#f0f0f0',
+        },
+        headerTitleStyle: {
+            fontWeight: 'bold',
+            color: theme.headerStyle.color || '#000',
+        },
+        headerRight: () => (
+          <Pressable onPress={toggleTheme} style={{ marginRight: 15 }}>
+            <FontAwesome
+              name={theme.mode==="light"?"leaf":"heartbeat"} // or "moon-o", "sun-o", etc.
+              size={22}
+              color={theme.headerStyle.color}
+            />
+          </Pressable>
+        ),
       }}>
       <Tabs.Screen
         name="index" // This is the file `app/(tabs)/index.jsx`
