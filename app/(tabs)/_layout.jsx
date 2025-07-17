@@ -1,6 +1,6 @@
 
 import { Tabs } from 'expo-router';
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome,MaterialIcons } from '@expo/vector-icons';
 
 export default function TabLayout() {
   return (
@@ -23,6 +23,15 @@ export default function TabLayout() {
           title: 'explore',
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="cog" size={size} color={color} />
+          ),
+        }}
+      />
+       <Tabs.Screen
+        name="ChoiceBoards" // This will be the file `app/(tabs)/ChoiceBoards.jsx`
+        options={{
+          title: 'ChoiceBoards',
+          tabBarIcon: ({ color, size }) => (
+           <MaterialIcons name="checklist" size={24} color="black" />
           ),
         }}
       />
