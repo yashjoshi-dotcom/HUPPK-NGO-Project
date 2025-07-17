@@ -2,7 +2,7 @@
 import { Stack } from 'expo-router';
 import { ThemeProvider } from '../hooks';
 import {Provider as PaperProvider,MD3LightTheme as DefaultTheme  } from 'react-native-paper';
-
+import "../styles/global.css"
 
 export default function RootLayout() {
  
