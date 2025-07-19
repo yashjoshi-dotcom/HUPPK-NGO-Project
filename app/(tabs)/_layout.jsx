@@ -1,25 +1,26 @@
-
 import { Tabs } from 'expo-router';
-import { FontAwesome } from '@expo/vector-icons';
+import { useTheme } from '../../hooks';
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import { Pressable } from 'react-native';
 
 export default function TabLayout() {
   const {theme,toggleTheme} = useTheme();
   return (
     <Tabs
       screenOptions={{
-        headerShown: true, // You can set this to false if you don't want a header
+        headerShown: true,
         tabBarStyle: theme.tabBarStyle,
         headerStyle: {
           backgroundColor: theme.headerStyle.backgroundColor || '#f0f0f0',
         },
         headerTitleStyle: {
-            fontWeight: 'bold',
-            color: theme.headerStyle.color || '#000',
+          fontWeight: 'bold',
+          color: theme.headerStyle.color || '#000',
         },
         headerRight: () => (
           <Pressable onPress={toggleTheme} style={{ marginRight: 15 }}>
             <FontAwesome
-              name={theme.mode==="light"?"leaf":"heartbeat"} // or "moon-o", "sun-o", etc.
+              name={theme.mode === "light" ? "leaf" : "heartbeat"} // Example icons
               size={22}
               color={theme.headerStyle.color}
             />
@@ -38,13 +39,13 @@ export default function TabLayout() {
       <Tabs.Screen
         name="explore" // This will be the file `app/(tabs)/settings.jsx`
         options={{
-          title: 'explore',
+          title: 'Explore',
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="cog" size={size} color={color} />
           ),
         }}
       />
-            <Tabs.Screen
+      <Tabs.Screen
         name="game" // This is the file `app/(tabs)/game.jsx`
         options={{
           title: 'Game',
@@ -53,12 +54,12 @@ export default function TabLayout() {
           ),
         }}
       />
-       <Tabs.Screen
+      <Tabs.Screen
         name="ChoiceBoards" // This will be the file `app/(tabs)/ChoiceBoards.jsx`
         options={{
           title: 'ChoiceBoards',
           tabBarIcon: ({ color, size }) => (
-           <MaterialIcons name="checklist" size={24} color="black" />
+            <MaterialIcons name="checklist" size={size} color={color} />
           ),
         }}
       />
