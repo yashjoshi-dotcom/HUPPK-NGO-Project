@@ -1,6 +1,6 @@
 
-import { Tabs } from 'expo-router';
 import { FontAwesome } from '@expo/vector-icons';
+import { Tabs } from 'expo-router';
 
 export default function TabLayout() {
   return (
@@ -23,6 +23,15 @@ export default function TabLayout() {
           title: 'explore',
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="cog" size={size} color={color} />
+          ),
+        }}
+      />
+            <Tabs.Screen
+        name="game" // This is the file `app/(tabs)/game.jsx`
+        options={{
+          title: 'Game',
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome name="gamepad" size={size} color={color} />
           ),
         }}
       />
