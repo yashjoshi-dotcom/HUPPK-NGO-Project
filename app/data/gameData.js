@@ -31,5 +31,7 @@ export const gameQuestions = [
     correctSound: require('../../assets/audio/correct.mp3'),
     incorrectSound: require('../../assets/audio/incorrect.mp3'),
   },
-  // Add more questions here...
+// TODO (yash): Add more questions here.
 ];
+
+export default { gameQuestions };

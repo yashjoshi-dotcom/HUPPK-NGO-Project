@@ -1,61 +1,78 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, Button } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { Audio } from 'expo-av';
+import { useAudioPlayer } from 'expo-audio';
 import { gameQuestions } from '../data/gameData';
+import ConfettiCannon from 'react-native-confetti-cannon';
 
 export default function GameScreen() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [explanation, setExplanation] = useState('');
-  const [sound, setSound] = useState();
+  
+  const [selectedId, setSelectedId] = useState(null);
 
+  const player = useAudioPlayer();
   const currentQuestion = gameQuestions[currentQuestionIndex];
 
   async function playSound(isCorrectAnswer) {
-    const soundFile = isCorrectAnswer ? currentQuestion.correctSound : currentQuestion.incorrectSound;
-    const { sound } = await Audio.Sound.createAsync(soundFile);
-    setSound(sound);
-    await sound.playAsync();
+    const soundFile = isCorrectAnswer
+      ? currentQuestion.correctSound
+      : currentQuestion.incorrectSound;
+    try {
+      player.replace(soundFile);
+      await player.play();
+    } catch (error) {
+      console.error("Error playing game sound:", error);
+    }
   }
 
-  useEffect(() => {
-    return sound
-      ? () => {
-          sound.unloadAsync();
-        }
-      : undefined;
-  }, [sound]);
-
   const handleAnswer = async (selectedOption) => {
+    setSelectedId(selectedOption.id); 
+
     const isCorrectAnswer = selectedOption.name === currentQuestion.correctAnswer;
     setIsCorrect(isCorrectAnswer);
+    setExplanation(isCorrectAnswer ? currentQuestion.explanation : currentQuestion.incorrectExplanation);
 
     if (isCorrectAnswer) {
-      setExplanation(currentQuestion.explanation);
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      await playSound(true);
     } else {
-      setExplanation(currentQuestion.incorrectExplanation);
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      await playSound(false);
     }
+    
+    await playSound(isCorrectAnswer);
     setModalVisible(true);
   };
 
   const handleNextQuestion = () => {
     setModalVisible(false);
+    // Reset the selection for the new question
+    setSelectedId(null); 
     const nextIndex = (currentQuestionIndex + 1) % gameQuestions.length;
     setCurrentQuestionIndex(nextIndex);
   };
 
   const handleTryAgain = () => {
     setModalVisible(false);
+    // Reset the selection so the user can pick again
+    setSelectedId(null); 
   };
+
+  if (!currentQuestion) {
+    return (
+      <View style={styles.container}>
+        <Text>Loading Questions...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
+      {isCorrect && modalVisible && (
+        <ConfettiCannon count={200} origin={{x: -10, y: 0}} autoStart={true} />
+      )}
+
       <View style={styles.topSection}>
         <Image source={currentQuestion.shadowImage} style={styles.shadowImage} />
       </View>
@@ -66,7 +83,18 @@ export default function GameScreen() {
 
       <View style={styles.bottomSection}>
         {currentQuestion.options.map((option) => (
-          <TouchableOpacity key={option.id} onPress={() => handleAnswer(option)}>
+          <TouchableOpacity 
+            key={option.id} 
+            onPress={() => handleAnswer(option)}
+            style={[
+              styles.optionContainer,
+              // Only apply border if an answer has been selected
+              selectedId === option.id && {
+                borderColor: isCorrect ? 'green' : 'red',
+                borderWidth: 4,
+              }
+            ]}
+          >
             <Image source={option.image} style={styles.optionImage} />
           </TouchableOpacity>
         ))}
@@ -128,13 +156,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333',
   },
+  optionContainer: {
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#ddd',
+    padding: 5, // Add some padding so the border doesn't crowd the image
+    backgroundColor: 'white', // Give it a solid background
+  },
   optionImage: {
     width: 100,
     height: 100,
     resizeMode: 'contain',
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: '#ddd',
   },
   modalContainer: {
     flex: 1,

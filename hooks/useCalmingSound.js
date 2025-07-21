@@ -1,41 +1,44 @@
 // hooks/useCalmingSound.js
-import { useEffect, useRef, useState } from 'react';
-import { Audio } from 'expo-av';
+import { useAudioPlayer } from 'expo-audio';
+import { useEffect } from 'react';
+
+// The audio file is loaded here once to be used by the hook
+const audioSource = require('../assets/audio/morning_in_forest.mp3');
 
 export const useCalmingSound = () => {
-  const soundRef = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const player = useAudioPlayer(audioSource, {
+    loop: true,
+  });
 
-  useEffect(() => {
-    const loadSound = async () => {
-      const { sound } = await Audio.Sound.createAsync(
-        require('../assets/audio/morning_in_forest.mp3'),
-        { isLooping: true, shouldPlay: false }
-      );
-      soundRef.current = sound;
-    };
+  // Toggle Func checks the 'playing' property and calls the appropriate method.
+  const toggleSound = () => {
+    // Safety check to prevent errors if the sound isn't loaded yet.
+    if (!player.isLoaded) {
+      return;
+    }
 
-    loadSound();
-
-    return () => {
-      if (soundRef.current) {
-        soundRef.current.unloadAsync();
-      }
-    };
-  }, []);
-
-  const toggleSound = async () => {
-    const sound = soundRef.current;
-    if (!sound) return;
-
-    if (isPlaying) {
-      await sound.pauseAsync();
-      setIsPlaying(false);
+    if (player.playing) {
+      player.pause();
     } else {
-      await sound.playAsync();
-      setIsPlaying(true);
+      player.play();
     }
   };
 
-  return { isPlaying, toggleSound };
+  useEffect(() => {
+    return () => {
+      if (player.isLoaded) {
+        player.pause(); // Stop playing when the component unmounts
+      }
+    };
+  }, [player]);
+
+  return {
+    // We export 'player.playing' as 'isPlaying' for a clear and descriptive name.
+    isPlaying: player.playing,
+    isLoaded: player.isLoaded,
+    toggleSound,
+  };
 };
+
+export default useCalmingSound;
+
