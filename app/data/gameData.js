@@ -5,7 +5,7 @@ export const gameQuestions = [
     id: 1,
     question: 'Which is a herbivorous animal?',
     options: [
-      { id: 'a', name: 'Lion', image: require('../../assets/images/games/lion.png') },
+      { id: 'a', name: 'Lion', image: require('../../assets/images/games/lion.jpg') },
       { id: 'b', name: 'Cow', image: require('../../assets/images/games/cow.png') },
       { id: 'c', name: 'Dog', image: require('../../assets/images/games/dog.png') },
     ],
@@ -22,10 +22,10 @@ export const gameQuestions = [
     options: [
         { id: 'a', name: 'Dog', image: require('../../assets/images/games/dog.png') },
         { id: 'b', name: 'Cow', image: require('../../assets/images/games/cow.png') },
-        { id: 'c', name: 'Lion', image: require('../../assets/images/games/lion.png') },
+        { id: 'c', name: 'Lion', image: require('../../assets/images/games/lion.jpg') },
     ],
     correctAnswer: 'Lion',
-    shadowImage: require('../../assets/images/games/lion.png'), // Placeholder
+    shadowImage: require('../../assets/images/games/lion.jpg'), // Placeholder
     explanation: 'Correct! The lion is famously called the "King of the Jungle."',
     incorrectExplanation: 'Not quite. While strong, the cow and dog are not known as the king.',
     correctSound: require('../../assets/audio/correct.mp3'),
