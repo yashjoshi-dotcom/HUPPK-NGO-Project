@@ -1,41 +1,54 @@
 // hooks/useCalmingSound.js
-import { useEffect, useRef, useState } from 'react';
-import { Audio } from 'expo-av';
+import { useAudioPlayer } from 'expo-audio';
+import { Asset } from 'expo-asset';
+import { useEffect, useState } from 'react';
+
+// Require the audio file to get its module metadata
+const audioModule = require('../assets/audio/morning_in_forest.mp3');
 
 export const useCalmingSound = () => {
-  const soundRef = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [soundURI, setSoundURI] = useState(undefined);
 
+  // Resolve the asset module into a usable URI on mount
   useEffect(() => {
-    const loadSound = async () => {
-      const { sound } = await Audio.Sound.createAsync(
-        require('../assets/audio/morning_in_forest.mp3'),
-        { isLooping: true, shouldPlay: false }
-      );
-      soundRef.current = sound;
-    };
-
-    loadSound();
-
-    return () => {
-      if (soundRef.current) {
-        soundRef.current.unloadAsync();
+    (async () => {
+      try {
+        const asset = Asset.fromModule(audioModule);
+        await asset.downloadAsync();
+        setSoundURI(asset.uri);
+      } catch (error) {
+        console.error('Failed to load sound asset:', error);
       }
-    };
+    })();
   }, []);
 
-  const toggleSound = async () => {
-    const sound = soundRef.current;
-    if (!sound) return;
+  // Create the audio player: source URI and optional update interval (ms)
+  const player = useAudioPlayer(soundURI, 1000);
 
-    if (isPlaying) {
-      await sound.pauseAsync();
-      setIsPlaying(false);
+  // Once loaded, enable looping on the native player instance
+  useEffect(() => {
+    if (player.isLoaded) {
+      player.loop = true;
+    }
+  }, [player]);
+
+  // Toggle play/pause with safety check
+  const toggleSound = () => {
+    if (!player.isLoaded) {
+      return;
+    }
+    if (player.playing) {
+      player.pause();
     } else {
-      await sound.playAsync();
-      setIsPlaying(true);
+      player.play();
     }
   };
 
-  return { isPlaying, toggleSound };
+  return {
+    isPlaying: player.playing,
+    isLoaded: player.isLoaded,
+    toggleSound,
+  };
 };
+
+export default useCalmingSound;
