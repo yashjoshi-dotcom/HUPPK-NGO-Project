@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, Button } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { useAudioPlayer } from 'expo-audio';
+import { Asset } from 'expo-asset';
 import { gameQuestions } from '../data/gameData';
 import ConfettiCannon from 'react-native-confetti-cannon';
 
@@ -10,18 +11,47 @@ export default function GameScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [explanation, setExplanation] = useState('');
-  
   const [selectedId, setSelectedId] = useState(null);
+  
+  // State to hold the resolved sound URIs
+  const [soundURIs, setSoundURIs] = useState({ correct: null, incorrect: null });
 
   const player = useAudioPlayer();
   const currentQuestion = gameQuestions[currentQuestionIndex];
 
+  // Effect to load sound assets when the question changes
+  useEffect(() => {
+    const loadSounds = async () => {
+      try {
+        const correctAsset = Asset.fromModule(currentQuestion.correctSound);
+        const incorrectAsset = Asset.fromModule(currentQuestion.incorrectSound);
+
+        await Promise.all([correctAsset.downloadAsync(), incorrectAsset.downloadAsync()]);
+
+        setSoundURIs({
+          correct: correctAsset.uri,
+          incorrect: incorrectAsset.uri,
+        });
+      } catch (error) {
+        console.error("Failed to load game sounds:", error);
+      }
+    };
+
+    if (currentQuestion) {
+      loadSounds();
+    }
+  }, [currentQuestionIndex]); // Re-run this effect when the question changes
+
   async function playSound(isCorrectAnswer) {
-    const soundFile = isCorrectAnswer
-      ? currentQuestion.correctSound
-      : currentQuestion.incorrectSound;
+    const soundURI = isCorrectAnswer ? soundURIs.correct : soundURIs.incorrect;
+
+    if (!soundURI || !player) {
+      console.log("Sound URI or player not ready.");
+      return;
+    }
+
     try {
-      player.replace(soundFile);
+      player.replace(soundURI); // <-- FIX: Use the resolved URI string
       await player.play();
     } catch (error) {
       console.error("Error playing game sound:", error);
@@ -29,7 +59,7 @@ export default function GameScreen() {
   }
 
   const handleAnswer = async (selectedOption) => {
-    setSelectedId(selectedOption.id); 
+    setSelectedId(selectedOption.id);
 
     const isCorrectAnswer = selectedOption.name === currentQuestion.correctAnswer;
     setIsCorrect(isCorrectAnswer);
@@ -40,23 +70,21 @@ export default function GameScreen() {
     } else {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
     }
-    
+
     await playSound(isCorrectAnswer);
     setModalVisible(true);
   };
-
+  
   const handleNextQuestion = () => {
     setModalVisible(false);
-    // Reset the selection for the new question
-    setSelectedId(null); 
+    setSelectedId(null);
     const nextIndex = (currentQuestionIndex + 1) % gameQuestions.length;
     setCurrentQuestionIndex(nextIndex);
   };
 
   const handleTryAgain = () => {
     setModalVisible(false);
-    // Reset the selection so the user can pick again
-    setSelectedId(null); 
+    setSelectedId(null);
   };
 
   if (!currentQuestion) {
@@ -74,7 +102,7 @@ export default function GameScreen() {
       )}
 
       <View style={styles.topSection}>
-        <Image source={currentQuestion.shadowImage} style={styles.shadowImage} />
+        <Image source={currentQuestion.shadowImage} style={styles.shadowImage} resizeMode="contain" />
       </View>
 
       <View style={styles.centerSection}>
@@ -88,14 +116,13 @@ export default function GameScreen() {
             onPress={() => handleAnswer(option)}
             style={[
               styles.optionContainer,
-              // Only apply border if an answer has been selected
               selectedId === option.id && {
                 borderColor: isCorrect ? 'green' : 'red',
                 borderWidth: 4,
               }
             ]}
           >
-            <Image source={option.image} style={styles.optionImage} />
+            <Image source={option.image} style={styles.optionImage} resizeMode="contain" />
           </TouchableOpacity>
         ))}
       </View>
@@ -120,6 +147,7 @@ export default function GameScreen() {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -148,7 +176,6 @@ const styles = StyleSheet.create({
   shadowImage: {
     width: 150,
     height: 150,
-    resizeMode: 'contain',
   },
   questionText: {
     fontSize: 24,
@@ -160,13 +187,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 2,
     borderColor: '#ddd',
-    padding: 5, // Add some padding so the border doesn't crowd the image
-    backgroundColor: 'white', // Give it a solid background
+    padding: 5,
+    backgroundColor: 'white',
   },
   optionImage: {
     width: 100,
     height: 100,
-    resizeMode: 'contain',
   },
   modalContainer: {
     flex: 1,

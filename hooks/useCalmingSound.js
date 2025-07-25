@@ -1,22 +1,42 @@
 // hooks/useCalmingSound.js
 import { useAudioPlayer } from 'expo-audio';
-import { useEffect } from 'react';
+import { Asset } from 'expo-asset';
+import { useEffect, useState } from 'react';
 
-// The audio file is loaded here once to be used by the hook
-const audioSource = require('../assets/audio/morning_in_forest.mp3');
+// Require the audio file to get its module metadata
+const audioModule = require('../assets/audio/morning_in_forest.mp3');
 
 export const useCalmingSound = () => {
-  const player = useAudioPlayer(audioSource, {
-    loop: true,
-  });
+  const [soundURI, setSoundURI] = useState(undefined);
 
-  // Toggle Func checks the 'playing' property and calls the appropriate method.
+  // Resolve the asset module into a usable URI on mount
+  useEffect(() => {
+    (async () => {
+      try {
+        const asset = Asset.fromModule(audioModule);
+        await asset.downloadAsync();
+        setSoundURI(asset.uri);
+      } catch (error) {
+        console.error('Failed to load sound asset:', error);
+      }
+    })();
+  }, []);
+
+  // Create the audio player: source URI and optional update interval (ms)
+  const player = useAudioPlayer(soundURI, 1000);
+
+  // Once loaded, enable looping on the native player instance
+  useEffect(() => {
+    if (player.isLoaded) {
+      player.loop = true;
+    }
+  }, [player]);
+
+  // Toggle play/pause with safety check
   const toggleSound = () => {
-    // Safety check to prevent errors if the sound isn't loaded yet.
     if (!player.isLoaded) {
       return;
     }
-
     if (player.playing) {
       player.pause();
     } else {
@@ -24,16 +44,7 @@ export const useCalmingSound = () => {
     }
   };
 
-  useEffect(() => {
-    return () => {
-      if (player.isLoaded) {
-        player.pause(); // Stop playing when the component unmounts
-      }
-    };
-  }, [player]);
-
   return {
-    // We export 'player.playing' as 'isPlaying' for a clear and descriptive name.
     isPlaying: player.playing,
     isLoaded: player.isLoaded,
     toggleSound,
@@ -41,4 +52,3 @@ export const useCalmingSound = () => {
 };
 
 export default useCalmingSound;
-
