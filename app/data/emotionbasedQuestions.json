@@ -29,7 +29,8 @@
                         "value": "hugs",
                         "result": {
                           "title": "That’s wonderful!",
-                          "suggestion": "Hugs make us feel warm and safe. Keep spending time with your family and share how much you love them too!"
+                          "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTI8chxjTO7-94CMulFTHjjy6Flh9tTyiycEg&s",
+                          "description": "Hugs make us feel warm and safe. Keep spending time with your family and share how much you love them too!."
                         }
                       },
                       {
@@ -38,7 +39,8 @@
                         "value": "kind_words",
                         "result": {
                           "title": "Kindness matters!",
-                          "suggestion": "Remember those kind words and say kind things back. It spreads happiness!"
+                          "image":"https://media.istockphoto.com/id/1454375916/vector/random-acts-of-kindness-day.jpg?s=612x612&w=0&k=20&c=n54JQap72879IMG944fWwL2zJ_3DEvST1AD99BtKeH4=",
+                          "description": "Remember those kind words and say kind things back. It spreads happiness!"
                         }
                       }
                     ]
@@ -63,7 +65,7 @@
             "value": "hurt",
             "followUp": {
               "question": "How did you get hurt?",
-                "description": "Did you fall down or did someone hurt you?",
+              "description": "Did you fall down or did someone hurt you?",
               "options": [
                 {
                   "label": "Fell Down",
@@ -71,7 +73,8 @@
                   "value": "fell",
                   "result": {
                     "title": "Ouch! That must have hurt.",
-                    "suggestion": "It’s okay to feel sad when we get hurt. If it still hurts, talk to your teacher or parent. They care about you."
+                    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqovgTHTF1m_krvCGjbPoJ_R90WlzrDSFCiQ&s",
+                    "description": "It’s okay to feel sad when we get hurt. If it still hurts, talk to your teacher or parent. They care about you."
                   }
                 },
                 {
@@ -80,7 +83,8 @@
                   "value": "hit",
                   "result": {
                     "title": "That’s not nice.",
-                    "suggestion": "Tell an adult if someone hurt you. You deserve to be safe and respected."
+                    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRW1XaK9aDxRpBcNXEP9LPz4zuVWysSUQBb0Q&s",
+                    "description": "Tell an adult if someone hurt you. You deserve to be safe and respected."
                   }
                 }
               ]
@@ -102,7 +106,8 @@
                     "value": "gift",
                     "result": {
                         "title": "How thoughtful!",
-                        "suggestion": "It's always nice to receive a gift. Remember to thank the person who gave it to you!"
+                        "image":"https://img.freepik.com/premium-vector/gift-box-cartoon-presents_661273-227.jpg",
+                        "description": "It's always nice to receive a gift. Remember to thank the person who gave it to you!"
                     }
                 },
                 {
@@ -111,7 +116,8 @@
                     "value": "noise",
                     "result": {
                         "title": "That can be startling!",
-                        "suggestion": "If a noise surprises you, take a deep breath and try to relax. It's okay to feel startled."
+                        "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQzHND8gJLw7JKlXY94hFJ-qsheytB9mGHqw&s",
+                        "description": "If a noise surprises you, take a deep breath and try to relax. It's okay to feel startled."
                     }
                 }
             ]
@@ -130,7 +136,8 @@
                     "value": "smell",
                     "result": {
                         "title": "Yikes! That sounds unpleasant.",
-                        "suggestion": "It's okay to feel disgusted by bad smells. Try to avoid them when you can!"
+                        "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKO4Lj_DlgLGvcN6PteVI4khSPdjMqMRv_eg&s",
+                        "description": "It's okay to feel disgusted by bad smells. Try to avoid them when you can!"
                     }
                 },
                 {
@@ -139,11 +146,43 @@
                     "value": "food",
                     "result": {
                         "title": "Not all food is for everyone.",
-                        "suggestion": "If you don't like a certain food, it's okay to say no thank you!"
+                        "image":"https://stepheningram.com/wp-content/uploads/2015/05/eating.jpg",
+                        "description": "If you don't like a certain food, it's okay to say no thank you!"
                     }
                 }
             ]
         }
-    }
+    },
+   {
+  "label": "Cold",
+  "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRs1x5_kqzbCfX3x3YzvjCOuS73zn4PtJu1Hw&s",
+  "followUp":{
+    "question":"Is your teeth chattering?",
+    "description":"Feeling cold can make us shiver. Let’s see how you feel.",
+    "options":[
+      {
+        "label": "Yes",
+        "image":"https://previews.123rf.com/images/limolida/limolida2002/limolida200201473/140863396-cute-yes-check-mark-symbol-cartoon-doodle-clip-art-hand-drawn-positive-agreement-typography-simply.jpg",
+        "value": "yes",
+        "result":{
+          "title":"Stay Warm!",
+          "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2Pl-wpJ7zX3wA_gza_7hnBJWPCiBGldvDFw&s",
+          "description":"Put on a warm jacket or blanket. It’s important to keep your body warm."
+        }
+      },
+      {
+        "label": "No",
+        "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPj_HX0fGYtfnY16f9ZubBXWcUxV1g0NsF-7wulhlYZWgUk25yXskC7Zvi5oDeoF-TlQo&usqp=CAU",
+        "value": "no",
+        "result":{
+          "title":"Good!",
+          "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2G4bNUJr-ra1M7fdxmRywri4nH7hhljWcaQ&s",
+          "description":"If you’re not cold, that’s great! Just remember to dress warmly when it’s chilly outside."
+        }
+      }
+    ]
+  } 
+}
+
   ]
 }
