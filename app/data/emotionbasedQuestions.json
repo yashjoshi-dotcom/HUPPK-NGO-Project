@@ -1,0 +1,149 @@
+{
+  "emotions": [
+    {
+      "label": "Happy",
+      "image": "https://img.freepik.com/premium-vector/cartoon-boy-running-with-his-arms-air_704913-15680.jpg?semt=ais_hybrid&w=740",
+      "followUp": {
+        "question": "What made you happy?",
+        "description": "Think about something that made you smile or feel good today.",
+        "options": [
+          {
+            "label": "Family",
+            "image":"https://i.pinimg.com/474x/97/e8/e7/97e8e796c61db13a704e2a116bd15afd.jpg",
+            "value": "family",
+            "followUp": {
+              "question": "What about your family made you happy?",
+              "description": "Was it something they did or said?",
+              "options": [
+                {
+                  "label": "Love",
+                  "image": "https://t4.ftcdn.net/jpg/01/89/77/03/360_F_189770305_KfsgGqttJkmZIm3YN8pXHTK3jKSQrjZ2.jpg",
+                  "value": "love",
+                  "followUp": {
+                    "question": "How did you feel loved?",
+                    "description": "Think about a specific moment when you felt loved.",
+                    "options": [
+                      {
+                        "label": "Hugs",
+                        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtsDWaBaHrufSuWUqQN0heBBHqYVQchiTrXv5WCiUtVIO_MuQJh5AE2aTCJBK_9gdChf0&usqp=CAU",
+                        "value": "hugs",
+                        "result": {
+                          "title": "That’s wonderful!",
+                          "suggestion": "Hugs make us feel warm and safe. Keep spending time with your family and share how much you love them too!"
+                        }
+                      },
+                      {
+                        "label": "Kind Words",
+                        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShduLNyOqUUN4KxvHY4sJeKaEdSa4qNinHaw&s",
+                        "value": "kind_words",
+                        "result": {
+                          "title": "Kindness matters!",
+                          "suggestion": "Remember those kind words and say kind things back. It spreads happiness!"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "label": "Sad",
+      "image": "https://i.pinimg.com/736x/21/60/86/2160865ae9cad4cd91f1d588904513de.jpg",
+      "followUp": {
+        "question": "Why are you sad?",
+        "description": "It’s okay to feel sad sometimes. Let’s talk about it.",
+        "options": [
+          {
+            "label": "Got Hurt",
+            "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9qZ2OGCqyUZn02waTvlWZvChk4aVkv1e4xQ&s",
+            "value": "hurt",
+            "followUp": {
+              "question": "How did you get hurt?",
+                "description": "Did you fall down or did someone hurt you?",
+              "options": [
+                {
+                  "label": "Fell Down",
+                  "image":"https://media.istockphoto.com/id/1079085696/vector/the-yellow-shirt-cartoon-boy-feel-shock-because-slipping-in-a-puddle-on-the-floor.jpg?s=612x612&w=0&k=20&c=uN4eHpNf9iHq9fFwsdJhY8m8JW6OVquQCpip6b6wWfc=",
+                  "value": "fell",
+                  "result": {
+                    "title": "Ouch! That must have hurt.",
+                    "suggestion": "It’s okay to feel sad when we get hurt. If it still hurts, talk to your teacher or parent. They care about you."
+                  }
+                },
+                {
+                  "label": "Someone Hit",
+                  "image": "https://media.istockphoto.com/id/1026132904/vector/aggressive-bully-preschool-boys-girls-kids-fighting-each-other-kicking-legs-violent.jpg?s=612x612&w=0&k=20&c=TGW5z2wuNvYFcjLeLJQTuCAuwVzkU6Zo3Jx3Xg4iq1A=",
+                  "value": "hit",
+                  "result": {
+                    "title": "That’s not nice.",
+                    "suggestion": "Tell an adult if someone hurt you. You deserve to be safe and respected."
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+        "label": "Surprised",
+        "image": "https://media.istockphoto.com/id/1175798458/vector/cute-kid-teen-boy-show-facial-expression.jpg?s=612x612&w=0&k=20&c=IekAQje6ZHVVi4Npw_DbqPlCxwdzxw3xp9KWbjUpX18=",
+        "followUp": {
+            "question": "What surprised you?",
+            "description": "Surprises can be fun or a bit scary. Let’s see what happened.",
+            "options": [
+                {
+                    "label": "Unexpected Gift",
+                    "image":"https://media.istockphoto.com/id/1206132850/vector/happy-cute-little-kid-boy-open-gift-from-birthday.jpg?s=612x612&w=0&k=20&c=ZU3rHaRPn_vcEsU5v0QbZCCdikLaaNoBonzW7le6y-U=",
+                    "value": "gift",
+                    "result": {
+                        "title": "How thoughtful!",
+                        "suggestion": "It's always nice to receive a gift. Remember to thank the person who gave it to you!"
+                    }
+                },
+                {
+                    "label": "Sudden Noise",
+                    "image":"https://media.istockphoto.com/id/683815394/vector/boy-suffering-from-tinnitus.jpg?s=612x612&w=0&k=20&c=ZXG8dl-wlpXjTKQF6P1AzLtupGKpS_9Ac_32kGfb9_Q=",
+                    "value": "noise",
+                    "result": {
+                        "title": "That can be startling!",
+                        "suggestion": "If a noise surprises you, take a deep breath and try to relax. It's okay to feel startled."
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "label": "Disgusted",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRY9S9yaBBm8rJ4m8WrjTS0zsiP5Zhq9ToCDQ&s",
+        "followUp": {
+            "question": "What made you feel disgusted?",
+            "description": "Disgust can happen when we see or smell something unpleasant.",
+            "options": [
+                {
+                    "label": "Bad Smell",
+                    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIBTDXgDcaKoVlOvl3x2NmEs-uZSzShiHbnw&s",
+                    "value": "smell",
+                    "result": {
+                        "title": "Yikes! That sounds unpleasant.",
+                        "suggestion": "It's okay to feel disgusted by bad smells. Try to avoid them when you can!"
+                    }
+                },
+                {
+                    "label": "Unpleasant Food",
+                    "image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIoWeBLb_I2uwyMLm5TsCHmaHzoZ_1fc2gog&s",
+                    "value": "food",
+                    "result": {
+                        "title": "Not all food is for everyone.",
+                        "suggestion": "If you don't like a certain food, it's okay to say no thank you!"
+                    }
+                }
+            ]
+        }
+    }
+  ]
+}
