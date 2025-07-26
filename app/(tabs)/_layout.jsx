@@ -101,6 +101,15 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="EmotionalChoices" // This will be the file `app/(tabs)/EmotionalChoices.jsx`
+        options={{
+          title: 'EmotionalChoices',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="chat" size={24} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
