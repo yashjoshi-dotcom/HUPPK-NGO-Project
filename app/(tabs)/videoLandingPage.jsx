@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   shortsThumbnail: {
-    width: '100%',
+    width: 190,
     height: 320,
     borderRadius: 10,
   },

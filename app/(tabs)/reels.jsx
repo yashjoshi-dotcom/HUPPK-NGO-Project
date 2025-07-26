@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -7,56 +7,52 @@ import {
   Text,
 } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
-import { Video } from 'expo-av';
+import { VideoView, useVideoPlayer } from 'expo-video';
+import { useEvent } from 'expo';
 import { FontAwesome } from '@expo/vector-icons';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useFocusEffect } from '@react-navigation/native';
 import { shortsData } from './videosData.js';
-import { useFocusEffect } from '@react-navigation/native';
-import { useCallback } from 'react';
 
 const { height, width } = Dimensions.get('window');
 
 const ReelsScreen = () => {
   const route = useRoute();
   const initialIndex = route.params?.initialIndex || 0;
-  console.log('Initial index from route:', initialIndex);
-  const videoRefs = useRef([]);
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [pausedStates, setPausedStates] = useState(shortsData.map(() => false));
   const [showPauseIcon, setShowPauseIcon] = useState(false);
   const carouselRef = useRef(null);
 
+  // Create players for all videos
+  const players = shortsData.map((item, i) =>
+    useVideoPlayer(item.videoUrl, (player) => {
+      player.loop = true;
+      if (i === initialIndex) player.play();
+    })
+  );
 
   useFocusEffect(
     useCallback(() => {
-      console.log('Screen focused, handling initialIndex:', initialIndex);
-
       if (carouselRef.current) {
         carouselRef.current.scrollTo({ index: initialIndex, animated: false });
       }
-
       handleSnapToItem(initialIndex);
 
       return () => {
-        console.log('Screen unfocused, pausing all videos');
-        videoRefs.current.forEach((video) => {
-          if (video) video.pauseAsync();
-        });
+        players.forEach((player) => player.pause());
       };
     }, [initialIndex])
   );
 
   const handlePlayPause = (index) => {
-    const video = videoRefs.current[index];
-    if (!video) return;
-
-    console.log(`Tapped video index: ${index}`);
+    const player = players[index];
+    if (!player) return;
 
     if (pausedStates[index]) {
-      video.playAsync();
+      player.play();
       setShowPauseIcon(false);
     } else {
-      video.pauseAsync();
+      player.pause();
       setShowPauseIcon(true);
       setTimeout(() => setShowPauseIcon(false), 1000);
     }
@@ -67,15 +63,12 @@ const ReelsScreen = () => {
   };
 
   const handleSnapToItem = (index) => {
-    console.log('Snapped to index:', index);
     setCurrentIndex(index);
-    videoRefs.current.forEach((video, i) => {
-      if (video) {
-        if (i === index) {
-          video.playAsync();
-        } else {
-          video.pauseAsync();
-        }
+    players.forEach((player, i) => {
+      if (i === index) {
+        player.play();
+      } else {
+        player.pause();
       }
     });
     setPausedStates((prev) =>
@@ -96,48 +89,49 @@ const ReelsScreen = () => {
         loop={true}
         defaultIndex={initialIndex}
         onSnapToItem={handleSnapToItem}
-        renderItem={({ item, index }) => (
-          <TouchableWithoutFeedback onPress={() => handlePlayPause(index)}>
-            <View style={styles.videoContainer}>
-              <Video
-                ref={(ref) => (videoRefs.current[index] = ref)}
-                source={{ uri: item.videoUrl }}
-                style={styles.video}
-                resizeMode="cover"
-                isLooping
-                shouldPlay={index === currentIndex}
-                useNativeControls={false}
-              />
+        renderItem={({ item, index }) => {
+          const player = players[index];
+          const { isPlaying } = useEvent(player, 'playingChange', {
+            isPlaying: player.playing,
+          });
 
-              {/* Pause icon overlay */}
-              {pausedStates[index] && index === currentIndex && showPauseIcon && (
-                <View style={styles.pauseIconContainer}>
-                  <FontAwesome name="pause-circle" size={80} color="rgba(255,255,255,0.85)" />
-                </View>
-              )}
+          return (
+            <TouchableWithoutFeedback onPress={() => handlePlayPause(index)}>
+              <View style={styles.videoContainer}>
+                <VideoView
+                  style={styles.video}
+                  player={player}
+                  allowsFullscreen={false}
+                  allowsPictureInPicture={false}
+                />
 
-              {/* Like / Dislike icons */}
-              <View style={styles.likeDislikeContainer}>
-                <View style={styles.iconCircle}>
-                  <FontAwesome name="thumbs-up" size={24} color="white" />
+                {pausedStates[index] && index === currentIndex && showPauseIcon && (
+                  <View style={styles.pauseIconContainer}>
+                    <FontAwesome name="pause-circle" size={80} color="rgba(255,255,255,0.85)" />
+                  </View>
+                )}
+
+                <View style={styles.likeDislikeContainer}>
+                  <View style={styles.iconCircle}>
+                    <FontAwesome name="thumbs-up" size={24} color="white" />
+                  </View>
+                  <Text style={styles.iconText}>28K</Text>
+                  <View style={[styles.iconCircle, { marginTop: 16 }]}>
+                    <FontAwesome name="thumbs-down" size={24} color="white" />
+                  </View>
+                  <Text style={styles.iconText}>Dislike</Text>
                 </View>
-                <Text style={styles.iconText}>28K</Text>
-                <View style={[styles.iconCircle, { marginTop: 16 }]}>
-                  <FontAwesome name="thumbs-down" size={24} color="white" />
+
+                <View style={styles.titleContainer}>
+                  <View style={styles.titleBackground}>
+                    <FontAwesome name="music" size={16} color="white" style={{ marginRight: 6 }} />
+                    <Text style={styles.titleText}>{item.title}</Text>
+                  </View>
                 </View>
-                <Text style={styles.iconText}>Dislike</Text>
               </View>
-
-              {/* Video title */}
-              <View style={styles.titleContainer}>
-                <View style={styles.titleBackground}>
-                  <FontAwesome name="music" size={16} color="white" style={{ marginRight: 6 }} />
-                  <Text style={styles.titleText}>{item.title}</Text>
-                </View>
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
-        )}
+            </TouchableWithoutFeedback>
+          );
+        }}
       />
     </View>
   );

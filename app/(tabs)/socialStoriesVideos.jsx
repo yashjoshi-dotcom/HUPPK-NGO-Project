@@ -1,20 +1,23 @@
-import React, { useRef } from 'react';
-import { View, Text, StyleSheet, FlatList, Image,TouchableOpacity } from 'react-native';
-import { Video } from 'expo-av';
+import React from 'react';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
+import { VideoView, useVideoPlayer } from 'expo-video';
 import { videoListData } from './videosData';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
 
 const SocialStoriesVideos = () => {
   const route = useRoute();
-  const videoRef = useRef(null);
   const navigation = useNavigation();
 
   const { videoId } = route.params || {};
   const index = videoListData.findIndex((item) => item.id === videoId);
-
   const currentVideo = index >= 0 ? videoListData[index] : null;
+
+  // Initialize player only if video is valid
+  const player = useVideoPlayer(currentVideo?.videoUrl, (playerInstance) => {
+    playerInstance.loop = true;
+    playerInstance.play();
+  });
 
   if (!currentVideo) {
     console.warn('Video not found for ID:', videoId);
@@ -28,9 +31,8 @@ const SocialStoriesVideos = () => {
   const renderOtherVideo = ({ item }) => (
     <TouchableOpacity
       onPress={() => {
-        console.log('Video pressed:', item.id);
         navigation.navigate('socialStoriesVideos', {
-          videoId: item.id, // Pass ID or full object
+          videoId: item.id,
         });
       }}
       style={styles.videoCard}
@@ -44,20 +46,16 @@ const SocialStoriesVideos = () => {
       </View>
     </TouchableOpacity>
   );
-  
 
   return (
     <View style={styles.container}>
       {/* Main Video */}
       <View style={styles.videoContainer}>
-        <Video
-          ref={videoRef}
-          source={{ uri: currentVideo.videoUrl }}
+        <VideoView
+          player={player}
           style={styles.video}
-          useNativeControls
-          resizeMode="contain"
-          shouldPlay
-          isLooping
+          allowsFullscreen
+          allowsPictureInPicture={false}
         />
       </View>
 
