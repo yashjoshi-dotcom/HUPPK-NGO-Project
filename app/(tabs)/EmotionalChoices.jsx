@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Image } from 'react-native';
-import EmotionTree from '../data/emotionbasedQuestions.json'; // Assume your JSON tree is exported here
+import {emotionsChoiceQuestions } from '../data/emotionalChoices';
 
 export default function EmotionalChoices () {
-  const [stack, setStack] = useState([{ node: EmotionTree }]);
+  const [stack, setStack] = useState([{ node: emotionsChoiceQuestions }]);
   const current = stack[stack.length - 1]?.node;
   const handleOptionSelect = (option) => {
     if (option?.result) {
@@ -12,42 +12,41 @@ export default function EmotionalChoices () {
       setStack([...stack, { node: option.followUp }]);
     }
   };
-
   const handleRestart = () => {
-    setStack([{ node: EmotionTree }]);
+    setStack([{ node: emotionsChoiceQuestions }]);
   };
 
-  const renderOptions = (options) => (
-    <View className="flex-row flex-wrap justify-center gap-4 mb-6">
-      {options?.map((option, idx) => (
-        <TouchableOpacity
+  const renderOptions = (options) => {
+    return (
+      <View className="flex-row flex-wrap justify-center gap-4 mb-6">
+        {options?.map((option, idx) => {
+          return (
+          <TouchableOpacity
           key={idx}
           activeOpacity={0.85}
           onPress={() => handleOptionSelect(option)}
-          style={{
-            backgroundColor: 'transparent',
-            borderWidth: 2,
-            borderColor: '#FFA500',
-            borderRadius: 16,
-            margin: 8,
-            padding: 12,
-            alignItems: 'center',
-          }}
+          className="bg-transparent border-2 border-orange-500 rounded-lg p-4 w-40 h-48 flex items-center justify-center"
         >
           {option?.image && (
-            <Image
-              source={{ uri: option.image }}
-              style={{ width: 72, height: 72, marginBottom: 12 }}
-              resizeMode="contain"
-            />
+            <View className="w-20 h-20 mb-3 overflow-hidden items-center justify-center">
+              <Image
+                source={option.image}
+                resizeMode="contain"
+                style={{ width: '100%', height: '100%' }}
+                onError={(error) => console.warn('Image failed to load', option.image, error)}
+                accessibilityLabel={option.label}
+              />
+            </View>
           )}
-          <Text style={{ color: '#FFA500', fontSize: 18, fontWeight: '600', textAlign: 'center' }}>
+          <Text className="text-orange-600 text-lg font-semibold text-center">
             {option?.label}
-          </Text>
-        </TouchableOpacity>
-      ))}
+            </Text>
+          </TouchableOpacity>
+          )
+        })}    
     </View>
-  );
+    )
+};
 
   return (
     <ScrollView className="flex-1 bg-white p-6">
@@ -57,7 +56,7 @@ export default function EmotionalChoices () {
             {current?.image && (
               <Image
                 source={{ uri: current.image }}
-                style={{ width: 150, height: 150, marginBottom: 16 }}
+                className="w-20 h-20 mb-4"
                 resizeMode="contain"
               />
             )}
@@ -84,7 +83,7 @@ export default function EmotionalChoices () {
                 {current?.description}
               </Text>
             )}
-            {renderOptions(current?.emotions || current?.options)}
+            {renderOptions(current?.options)}
           </View>
         )}
       </View>
