@@ -25,10 +25,10 @@ export default function EmotionalChoices () {
           key={idx}
           activeOpacity={0.85}
           onPress={() => handleOptionSelect(option)}
-          className="bg-transparent border-2 border-orange-500 rounded-lg p-4 w-40 h-48 flex items-center justify-center"
+          className="bg-transparent border-2 border-orange-500 rounded-lg p-4 w-50 h-50 flex items-center justify-center"
         >
           {option?.image && (
-            <View className="w-20 h-20 mb-3 overflow-hidden items-center justify-center">
+            <View className="w-40 h-40 mb-3 overflow-hidden items-center justify-center">
               <Image
                 source={option.image}
                 resizeMode="contain"
@@ -54,11 +54,15 @@ export default function EmotionalChoices () {
         {stack[stack.length - 1]?.isResult ? (
           <>
             {current?.image && (
-              <Image
-                source={{ uri: current.image }}
-                className="w-20 h-20 mb-4"
-                resizeMode="contain"
-              />
+              <View className="w-40 h-40 mb-3 overflow-hidden items-center justify-center">
+                <Image
+                  source={current?.image}
+                  accessibilityLabel={current?.title}
+                  resizeMode="contain"
+                  style={{ width: '100%', height: '100%' }}
+                  onError={(error) => console.warn('Image failed to load', current?.image, error)}
+                />
+              </View>
             )}
             <Text className="text-2xl font-bold text-green-600 mb-4">
               {current?.title}
