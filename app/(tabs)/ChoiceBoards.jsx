@@ -28,7 +28,7 @@ export default function ChoiceBoards() {
         </Card.Content>
       </Card>
 
-      <Card style={styles.card} onPress={() => router.push('choiceBoards/ChoiceBoards', { type: 'Clothes' })}>
+      <Card style={styles.card} onPress={() => router.push('choiceBoards/ChoiceBoards', { type: 'Food' })}>
         <Image source={require('../../assets/images/choiceBoards/food.jpg')} style={{ width: '100%', height: 200, borderRadius: 8 }} resizeMode='cover' resizeMethod='auto' />
         <Card.Content>
           <Text variant="titleLarge">Food</Text>
@@ -49,11 +49,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     elevation: 3,
     borderRadius: 12,
-    margin:'auto',
+    alignSelf: 'center',
     width:300
   },
   image: {
-    resizeMode: 'contain',
+    resizeMode: 'cover',
     borderRadius: 12,
   },
 background: {

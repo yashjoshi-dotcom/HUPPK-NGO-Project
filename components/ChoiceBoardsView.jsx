@@ -35,7 +35,10 @@ const ChoiceBoardsView = ({ data = []}) => {
 
   const handleAnswer = async (questionId, value) => {
     const isCorrectVal = (value === currentItem.correctAnswer);
-    await playSound(player, isCorrectVal ? soundURIs.correct.uri : soundURIs.incorrect.uri);
+    const soundURI = isCorrectVal ? soundURIs.correct?.uri : soundURIs.incorrect?.uri;
+    if (soundURI) {
+      await playSound(player, soundURI);
+    }
     setIsCorrect(isCorrectVal);
     setModalVisible(true);
   };
