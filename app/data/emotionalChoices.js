@@ -33,7 +33,7 @@ export const emotionsChoiceQuestions={
                         result: {
                           title: "That’s wonderful!",
                           image:require('../../assets/images/emotionalChoices/wonderful.jpg'),
-                          description: "Hugs make us feel warm and safe. Keep spending time with your family and share how much you love them too!."
+                          description: "Hugs make us feel warm and safe. Keep spending time with your family and share how much you love them too!"
                         }
                       },
                       {
@@ -130,7 +130,7 @@ export const emotionsChoiceQuestions={
   label: "Cold",
   image: require('../../assets/images/emotionalChoices/cold.jpeg'),
   followUp:{
-    question:"Is your teeth chattering?",
+    question:"Are your teeth chattering?",
     description:"Feeling cold can make us shiver. Let’s see how you feel.",
     options:[
       {
