@@ -106,7 +106,7 @@ export default function TabLayout() {
         options={{
           title: 'EmotionalChoices',
           tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="chat" size={24} color={color} />
+            <MaterialIcons name="chat" size={size} color={color} />
           ),
         }}
       />
