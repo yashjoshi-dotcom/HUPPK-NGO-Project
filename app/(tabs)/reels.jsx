@@ -5,6 +5,8 @@ import {
   View,
   TouchableWithoutFeedback,
   Text,
+  TouchableOpacity,
+  ToastAndroid,
 } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import { VideoView, useVideoPlayer } from 'expo-video';
@@ -103,6 +105,7 @@ const ReelsScreen = () => {
                   player={player}
                   allowsFullscreen={false}
                   allowsPictureInPicture={false}
+                  nativeControls={false}
                 />
 
                 {pausedStates[index] && index === currentIndex && showPauseIcon && (
@@ -112,15 +115,32 @@ const ReelsScreen = () => {
                 )}
 
                 <View style={styles.likeDislikeContainer}>
-                  <View style={styles.iconCircle}>
-                    <FontAwesome name="thumbs-up" size={24} color="white" />
-                  </View>
-                  <Text style={styles.iconText}>28K</Text>
-                  <View style={[styles.iconCircle, { marginTop: 16 }]}>
-                    <FontAwesome name="thumbs-down" size={24} color="white" />
-                  </View>
-                  <Text style={styles.iconText}>Dislike</Text>
+                  <TouchableOpacity
+                    onPress={() =>
+                      ToastAndroid.show('🌟 Thanks! We’ll find more good videos for you! 🎉', ToastAndroid.LONG)
+                    }
+                    style={styles.iconWrapper}
+                  >
+                    <View style={styles.iconCircle}>
+                      <FontAwesome name="thumbs-up" size={24} color="white" />
+                    </View>
+                    <Text style={styles.iconText}>Like</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={() =>
+                      ToastAndroid.show('👍 Thanks! We’ll show different videos for you! 🎥✨', ToastAndroid.LONG)
+                    }
+                    style={[styles.iconWrapper, { marginTop: 24 }]}
+                  >
+                    <View style={styles.iconCircle}>
+                      <FontAwesome name="thumbs-down" size={24} color="white" />
+                    </View>
+                    <Text style={styles.iconText}>Dislike</Text>
+                  </TouchableOpacity>
                 </View>
+
+
 
                 <View style={styles.titleContainer}>
                   <View style={styles.titleBackground}>
@@ -148,6 +168,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width,
     height,
+    marginBottom: 110, // Add some space at the bottom
   },
   video: {
     width: '100%',
@@ -164,7 +185,7 @@ const styles = StyleSheet.create({
   likeDislikeContainer: {
     position: 'absolute',
     right: 20,
-    bottom: 230,
+    bottom: 80,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -183,7 +204,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     position: 'absolute',
-    bottom: 130,
+    bottom: 30,
     left: 20,
     right: 20,
   },
@@ -199,4 +220,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
   },
+  iconWrapper: {
+    alignItems: 'center',
+  },  
 });
