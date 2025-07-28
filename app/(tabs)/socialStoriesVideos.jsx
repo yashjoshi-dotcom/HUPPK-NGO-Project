@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ToastAndroid  } from 'react-native';
 import { VideoView, useVideoPlayer } from 'expo-video';
 import { videoListData } from './videosData';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
+
+
 
 const SocialStoriesVideos = () => {
   const route = useRoute();
@@ -37,7 +39,7 @@ const SocialStoriesVideos = () => {
       }}
       style={styles.videoCard}
     >
-      <Image source={{ uri: item.thumbnail }} style={styles.thumbnail} />
+      <Image source={item.thumbnail} style={styles.thumbnail} />
       <View style={styles.videoDetails}>
         <Text style={styles.videoTitle} numberOfLines={2}>{item.title}</Text>
         <Text style={styles.videoMeta}>
@@ -64,14 +66,21 @@ const SocialStoriesVideos = () => {
 
       {/* Likes/Dislikes */}
       <View style={styles.likesContainer}>
-        <View style={styles.likesBox}>
+        <TouchableOpacity
+          style={styles.likesBox}
+          onPress={() => ToastAndroid.show('🌟 Thanks! We’ll find more good videos for you!🎉', ToastAndroid.LONG)}
+        >
           <FontAwesome name="thumbs-up" size={18} color="#fff" />
-          <Text style={styles.likesText}> 997</Text>
-        </View>
+        </TouchableOpacity>
+
         <View style={styles.separator} />
-        <View style={styles.likesBox}>
+
+        <TouchableOpacity
+          style={styles.likesBox}
+          onPress={() => ToastAndroid.show('👍Thanks! We’ll show different videos for you!🎥✨', ToastAndroid.LONG)}
+        >
           <FontAwesome name="thumbs-down" size={18} color="#fff" />
-        </View>
+        </TouchableOpacity>
       </View>
 
       {/* Other Videos */}
