@@ -31,7 +31,7 @@ const HomeScreen = () => {
         });
       }}
     >
-      <Image source={{ uri: item.thumbnail }} style={styles.shortsThumbnail} />
+      <Image source={item.thumbnail} style={styles.shortsThumbnail} />
       <Text style={styles.shortsTitle} numberOfLines={2}>{item.title}</Text>
       <Text style={styles.shortsViews}>{item.views}</Text>
     </TouchableOpacity>
@@ -47,7 +47,7 @@ const HomeScreen = () => {
       }}
       style={styles.videoCard}
     >
-      <Image source={{ uri: item.thumbnail }} style={styles.videoThumbnail} />
+      <Image source={item.thumbnail} style={styles.videoThumbnail} />
       <View style={styles.videoDetails}>
         <Image
           source={{ uri: 'https://i.imgur.com/tGbaZCY.jpg' }}

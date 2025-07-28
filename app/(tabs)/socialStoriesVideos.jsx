@@ -39,7 +39,7 @@ const SocialStoriesVideos = () => {
       }}
       style={styles.videoCard}
     >
-      <Image source={{ uri: item.thumbnail }} style={styles.thumbnail} />
+      <Image source={item.thumbnail} style={styles.thumbnail} />
       <View style={styles.videoDetails}>
         <Text style={styles.videoTitle} numberOfLines={2}>{item.title}</Text>
         <Text style={styles.videoMeta}>
