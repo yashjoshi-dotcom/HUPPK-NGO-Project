@@ -3,8 +3,8 @@
 import { Stack } from 'expo-router';
 import { useTheme, ThemeProvider } from '../hooks';
 import { Provider as PaperProvider, MD3LightTheme } from 'react-native-paper';
-import { Colors } from '../constants/Colors';
 import '../styles/global.css';
+
 
 function RootLayoutNav() {
   const { theme } = useTheme();
@@ -38,7 +38,7 @@ function RootLayoutNav() {
     <PaperProvider theme={paperTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="quiz/QuizView" options={{ title: 'Choices Test' }} />
+        <Stack.Screen name="choiceBoards/ChoiceBoards" options={{ title: 'Choice Boards' }} />
       </Stack>
     </PaperProvider>
   );
