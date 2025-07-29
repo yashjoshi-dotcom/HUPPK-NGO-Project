@@ -1,10 +1,14 @@
 // app/_layout.jsx
-
+import 'react-native-reanimated'; // 👈 must be first
 import { Stack } from 'expo-router';
 import { useTheme, ThemeProvider } from '../hooks';
 import { Provider as PaperProvider, MD3LightTheme } from 'react-native-paper';
 import '../styles/global.css';
+import { StyleSheet } from 'react-native';
+import { enableScreens } from 'react-native-screens';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+enableScreens(); 
 
 function RootLayoutNav() {
   const { theme } = useTheme();
@@ -35,12 +39,15 @@ function RootLayoutNav() {
   };
 
   return (
+     <GestureHandlerRootView style={styles.flex}>
     <PaperProvider theme={paperTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="choiceBoards/ChoiceBoards" options={{ title: 'Choice Boards' }} />
       </Stack>
+      
     </PaperProvider>
+    </GestureHandlerRootView>
   );
 }
 
@@ -51,3 +58,7 @@ export default function RootLayout() {
     </ThemeProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  flex: { flex: 1 },
+});
