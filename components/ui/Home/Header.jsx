@@ -10,10 +10,11 @@ const avatar = require('../../../assets/images/image-removebg-preview.png');
 
 // --- ADJUSTABLE PARAMETERS ---
 const HEADER_HEIGHT = 60; // % of viewport height (adjust between 60-70)
-const AVATAR_SIZE = 318; // Size in rem units (try values between 40-52)
-const TOP_SPACING = 22; // % of header height (adjust between 10-15)
-const AVATAR_SECTION_HEIGHT = 55; // % of header height (adjust between 45-55)
+const AVATAR_SIZE = 308; // Size in rem units (try values between 40-52)
+const TOP_SPACING = 25; // % of header height (adjust between 10-15)
+const AVATAR_SECTION_HEIGHT = 58; // % of header height (increased to allow overlap)
 const GREEN_STRIP_HEIGHT = 1; // % of header height (adjust between 5-10)
+const TEXT_OVERLAP = 50; // How much the text overlaps with avatar (in pixels)
 // ----------------------------
 
 export default function Header() {
@@ -58,39 +59,45 @@ export default function Header() {
         {/* Top spacing */}
         <View style={{ height: `${TOP_SPACING}%` }} />
         
-        {/* Avatar Section - Centered */}
-        <View style={{ height: `${AVATAR_SECTION_HEIGHT}%` }} className="items-center justify-center">
+        {/* Avatar Section - Centered - Now with increased height */}
+        <View 
+          style={{ height: `${AVATAR_SECTION_HEIGHT}%` }} 
+          className="items-center relative"
+        >
           <Image
             source={avatar}
             style={{ width: AVATAR_SIZE, height: AVATAR_SIZE }}
             resizeMode="contain"
           />
-        </View>
-        
-        {/* Points Section with Simple Glow Effect - Below Avatar */}
-        <View className="items-center mt-1">
-          {/* Points text with glow effect */}
-          <Text 
-            className="text-white text-5xl font-extrabold"
-            style={{
-              textShadowColor: 'rgba(255, 255, 255, 0.9)',
-              textShadowOffset: { width: 0, height: 0 },
-              textShadowRadius: 10,
-            }}
-          >
-            {displayedScore.toLocaleString()}
-          </Text>
           
-          <Text 
-            className="text-white/80 text-lg font-semibold"
-            style={{
-              textShadowColor: 'rgba(255, 255, 255, 0.7)',
-              textShadowOffset: { width: 0, height: 0 },
-              textShadowRadius: 5,
-            }}
+          {/* Points Section - Now positioned with absolute to overlap with avatar */}
+          <View 
+            className="absolute items-center w-full"
+            style={{ bottom: -TEXT_OVERLAP }}
           >
-            COS coins collected
-          </Text>
+            {/* Points text with glow effect */}
+            <Text 
+              className="text-white text-7xl font-extrabold"
+              style={{
+                textShadowColor: 'rgba(255, 255, 255, 0.9)',
+                textShadowOffset: { width: 0, height: 0 },
+                textShadowRadius: 10,
+              }}
+            >
+              {displayedScore.toLocaleString()}
+            </Text>
+            
+            <Text 
+              className="text-white/80 text-lg font-semibold"
+              style={{
+                textShadowColor: 'rgba(255, 255, 255, 0.7)',
+                textShadowOffset: { width: 0, height: 0 },
+                textShadowRadius: 5,
+              }}
+            >
+              COS coins collected
+            </Text>
+          </View>
         </View>
         
         {/* Green strip at the bottom to represent landscape end */}
