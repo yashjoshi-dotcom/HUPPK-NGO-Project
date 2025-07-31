@@ -128,7 +128,7 @@ const ChoiceBoardsView = ({ data = []}) => {
         onRequestClose={() => setModalVisible(false)}>
         <View style={styles.modalContainer}>
           <View style={styles.modalView}>
-            <Text style={styles.modalTitle}>{isCorrect ? '✅ Correct! Great job!' : '❌ Incorrect. Try again!'}</Text>
+            <Text style={styles.modalTitle}>{isCorrect ? '🎉 Correct! Great job!' : '❌ Incorrect. Try again!'}</Text>
             {isCorrect ? (
               <Button title="Next Question" onPress={handleNextQuestion} />
             ) : (

@@ -118,6 +118,24 @@ export default function TabLayout() {
           ),
         }}
       />
+       <Tabs.Screen
+        name="sorting" // This will be the file `app/(tabs)/sorting.jsx`
+        options={{
+          title: 'Sorting',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="gamepad" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="sortnumber" // This will be the file `app/(tabs)/sorting.jsx`
+        options={{
+          title: 'Sorting',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="gamepad" size={size} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
