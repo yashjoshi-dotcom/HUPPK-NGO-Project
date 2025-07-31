@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { shortsData, videoListData } from './videosData.js'; 
+import { shortsData, videoListData } from  '../data/videosData'; // Adjust the import path as necessary
 
 const screenWidth = Dimensions.get('window').width;
 
