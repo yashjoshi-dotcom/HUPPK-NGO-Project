@@ -69,7 +69,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="ChoiceBoards"
         options={{
-          title: 'Choice Boards',
+          title: 'Learning Zone',
           tabBarIcon: ({ color, size }) => <MaterialIcons name="checklist" size={size} color={color} />,
         }}
       />
