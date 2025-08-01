@@ -56,7 +56,6 @@ const SocialStoriesVideos = () => {
   if (!currentVideo) {
     return (
       <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>Video not found or not available offline.</Text>
       </View>
     );
   }

@@ -97,7 +97,7 @@ const HomeScreen = () => {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.sectionTitle}>Shorts</Text>
-      {filteredShorts.length > 0 ? (
+      {
         <FlatList
           data={filteredShorts}
           renderItem={renderShortsItem}
@@ -106,12 +106,10 @@ const HomeScreen = () => {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.shortsList}
         />
-      ) : (
-        <Text style={styles.offlineText}>No shorts available offline.</Text>
-      )}
+      }
 
       <Text style={styles.sectionTitle}>Videos</Text>
-      {filteredVideos.length > 0 ? (
+      {
         <FlatList
           data={filteredVideos}
           renderItem={renderVideoItem}
@@ -119,9 +117,7 @@ const HomeScreen = () => {
           scrollEnabled={false}
           contentContainerStyle={styles.videoList}
         />
-      ) : (
-        <Text style={styles.offlineText}>No videos available offline.</Text>
-      )}
+      }
     </ScrollView>
   );
 };
@@ -130,7 +126,7 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 30,
+    // marginTop: 30,
     marginBottom: 50,
     flex: 1,
     backgroundColor: '#121212',

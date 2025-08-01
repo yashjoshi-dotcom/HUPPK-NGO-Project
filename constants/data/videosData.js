@@ -88,30 +88,30 @@ export const shortsData = [
     },
     {
       id: '4',
-      thumbnail: { uri: 'https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg' }, // Use object with uri key
-      title: 'Playlist make you feel like a boss | Gentleman songs',
-      channel: 'Dark Blues Music',
+      thumbnail: { uri: 'https://raw.githubusercontent.com/Tanush15/ngo_assets/main/accepting_no.png' }, // Use object with uri key
+      title: 'Accepting NO | Emotional regulation social stories',
+      channel: 'Social Stories Channel',
       views: '170K views',
       date: '2 weeks ago',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+      videoUrl: 'https://raw.githubusercontent.com/Tanush15/ngo_assets/main/Accepting%20NO%20Social%20Story%20Emotional%20regulation%20social%20stories.mp4',
     },
     {
       id: '5',
-      thumbnail: { uri: 'https://images.pexels.com/photos/8173471/pexels-photo-8173471.jpeg' }, // Use object with uri key
-      title: 'Legs Workout Easy | Episode 01',
-      channel: 'Gym Bros',
+      thumbnail: { uri: 'https://raw.githubusercontent.com/Tanush15/ngo_assets/main/asking_help.png' }, // Use object with uri key
+      title: 'Asking for Help | Social Stories',
+      channel: 'Social Stories Channel',
       views: '210K views',
       date: '1 week ago',
-      videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
+      videoUrl: 'https://raw.githubusercontent.com/Tanush15/ngo_assets/main/Asking%20For%20Help%20-%20Scout%20s%20Back-To-School%20Series%20_%20Scout%20s%20Social%20Stories%20_%20Back%20to%20school%20story%20(online-video-cutter.com).mp4',
     },
     {
       id: '6',
-      thumbnail: { uri: 'https://images.pexels.com/photos/12795/pexels-photo-12795.jpeg' }, // Use object with uri key
-      title: 'Everything you should know about F1',
-      channel: 'Dark Blues Music',
+      thumbnail: { uri: 'https://raw.githubusercontent.com/Tanush15/ngo_assets/main/no_hitting.png' }, // Use object with uri key
+      title: 'No Hitting | Social Stories',
+      channel: 'Social Stories Channel',
       views: '170K views',
       date: '2 weeks ago',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+      videoUrl: 'https://raw.githubusercontent.com/Tanush15/ngo_assets/main/No%20hitting%20Social%20Story%20(online-video-cutter.com).mp4',
     },
   ];
   

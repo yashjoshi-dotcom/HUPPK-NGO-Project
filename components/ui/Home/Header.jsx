@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../../hooks/useThemeContext';
+import { Colors } from '../../../constants/Colors';
 
 // --- ASSET DEFINITIONS ---
 const landscapeBg = require('../../../assets/images/gradient-mountain-landscape_52683-77407.png');
@@ -15,12 +17,18 @@ const HEADER_HEIGHT = screenHeight * 0.55; // 65% of the screen height
 export default function Header() {
   const [displayedScore, setDisplayedScore] = useState(0);
   const targetScore = 25982;
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, setTheme } = useTheme();
+  const isFocused = useIsFocused();
 
   const buttonBgClass = theme.mode === 'calming' 
     ? 'bg-teal-500' 
     : 'bg-black/20';
 
+  useEffect(() => {
+    if (!isFocused && theme.mode === 'calming') {
+      setTheme(Colors.light); // 👈 resets back to light theme
+    }
+  }, [isFocused]);
   useEffect(() => {
     const duration = 1200;
     const frameRate = 1000 / 60;
