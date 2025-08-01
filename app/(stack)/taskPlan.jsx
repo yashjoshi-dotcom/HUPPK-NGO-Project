@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#000',
-    marginBottom: 10, // Adjust as needed
   },
   slide: {
     alignItems: 'center',

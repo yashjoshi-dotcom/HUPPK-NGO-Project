@@ -1,19 +1,19 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import { FontAwesome } from '@expo/vector-icons';
+import { useFocusEffect, useRoute } from '@react-navigation/native';
+import { useEvent } from 'expo';
+import { VideoView, useVideoPlayer } from 'expo-video';
+import { useCallback, useRef, useState } from 'react';
 import {
   Dimensions,
   StyleSheet,
-  View,
-  TouchableWithoutFeedback,
   Text,
-  TouchableOpacity,
   ToastAndroid,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
-import { VideoView, useVideoPlayer } from 'expo-video';
-import { useEvent } from 'expo';
-import { FontAwesome } from '@expo/vector-icons';
-import { useRoute, useFocusEffect } from '@react-navigation/native';
-import { shortsData } from './videosData.js';
+import { shortsData } from '../data/videosData.js';
 
 const { height, width } = Dimensions.get('window');
 

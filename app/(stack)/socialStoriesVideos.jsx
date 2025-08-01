@@ -1,9 +1,8 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ToastAndroid  } from 'react-native';
-import { VideoView, useVideoPlayer } from 'expo-video';
-import { videoListData } from './videosData';
-import { useRoute, useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { VideoView, useVideoPlayer } from 'expo-video';
+import { FlatList, Image, StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
+import { videoListData } from '../data/videosData';
 
 
 

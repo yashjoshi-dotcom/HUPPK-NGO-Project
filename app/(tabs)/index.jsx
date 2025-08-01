@@ -1,21 +1,17 @@
-import { View, StyleSheet,Text } from 'react-native';
-import { useTheme } from '../../hooks';
-import { Home } from '../../components/ui/Home/home';
+import React from 'react';
+import { View, ScrollView, SafeAreaView, StatusBar } from 'react-native';
+import Header from '../../components/ui/Home/Header';
+import GameList from '../../components/ui/Home/Gamelist';
 
 export default function HomeScreen() {
-  const { theme } = useTheme();
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <Home />
-         <Text className="text-xl font-bold text-blue-500">
-        Welcome to Nativewind! You can now use Tailwind CSS classes in your React Native components.
-      </Text>
-    </View>
+    <SafeAreaView className="flex-1 bg-gray-50">
+      <StatusBar barStyle="light-content" />
+      <ScrollView>
+        <Header />
+        <GameList />
+        {/* You can add more sections here later */}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
