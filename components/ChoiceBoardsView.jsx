@@ -94,9 +94,8 @@ const ChoiceBoardsView = ({ data = [] }) => {
           <View className="w-full h-56 rounded-t-3xl overflow-hidden">
             <Image
               source={currentItem.image}
-              resizeMode={currentItem.resize || 'contain'}
-              width={'100%'}
-              height={'100%'}
+              resizeMode={currentItem.resize}
+              className="w-full h-full"
             />
           </View>
 
