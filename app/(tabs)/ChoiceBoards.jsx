@@ -39,7 +39,7 @@ export default function ChoiceBoards() {
 
       {/* Scrollable Content */}
       <ScrollView style={styles.scrollContainer} contentContainerStyle={{ paddingTop: 320 }}>
-        <Card style={styles.card} onPress={() => router.push('choiceBoards/ChoiceBoards', { type: 'Clothes' })}>
+        <Card style={styles.card} onPress={() => router.push('choiceBoards/ChoiceBoards?type=Clothes')}>
           <Image
             source={require('../../assets/images/choiceBoards/clothes.jpg')}
             style={{ width: '100%', height: 200, borderRadius: 8 }}
@@ -51,7 +51,7 @@ export default function ChoiceBoards() {
           </Card.Content>
         </Card>
 
-        <Card style={styles.card} onPress={() => router.push('choiceBoards/ChoiceBoards', { type: 'RoadSafety' })}>
+        <Card style={styles.card} onPress={() => router.push('choiceBoards/ChoiceBoards?type=RoadSafety')}>
           <Image
             source={require('../../assets/images/choiceBoards/roadsafety.jpg')}
             style={{ width: '100%', height: 200, borderRadius: 8 }}
@@ -63,7 +63,7 @@ export default function ChoiceBoards() {
           </Card.Content>
         </Card>
 
-        <Card style={styles.card} onPress={() => router.push('choiceBoards/ChoiceBoards', { type: 'Food' })}>
+        <Card style={styles.card} onPress={() => router.push('choiceBoards/ChoiceBoards?type=Food')}>
           <Image
             source={require('../../assets/images/choiceBoards/food.jpg')}
             style={{ width: '100%', height: 200, borderRadius: 8 }}

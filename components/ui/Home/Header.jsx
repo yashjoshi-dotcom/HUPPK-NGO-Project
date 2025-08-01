@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../../hooks/useThemeContext';
+import { useStreak } from '../../../hooks/steakContext.js';
 
 // --- ASSET DEFINITIONS ---
 const landscapeBg = require('../../../assets/images/gradient-mountain-landscape_52683-77407.png');
@@ -18,8 +19,10 @@ const TEXT_OVERLAP = 50; // How much the text overlaps with avatar (in pixels)
 // ----------------------------
 
 export default function Header() {
+  const {pointsStreak, daysStreak, lastLoginDate, updateLastLoginDate, incrementPointsStreak, incrementDaysStreak} = useStreak();
   const [displayedScore, setDisplayedScore] = useState(0);
-  const targetScore = 25982;
+  // const pointsStreak = pointsStreak || 0; // Fallback to 0 if pointsStreak is undefined
+  console.log('Target score for animation:', pointsStreak," points:", pointsStreak);
   const { theme, toggleTheme } = useTheme();
 
   const buttonBgClass = theme.mode === 'calming' 
@@ -27,16 +30,20 @@ export default function Header() {
     : 'bg-black/20';
 
   useEffect(() => {
+    if (pointsStreak === 0) {
+      setDisplayedScore(0);
+      return;
+    }
     const duration = 1200;
     const frameRate = 1000 / 60;
     const totalFrames = Math.round(duration / frameRate);
-    const increment = targetScore / totalFrames;
+    const increment = pointsStreak / totalFrames;
     let currentScore = 0;
 
     const timer = setInterval(() => {
       currentScore += increment;
-      if (currentScore >= targetScore) {
-        setDisplayedScore(targetScore);
+      if (currentScore >= pointsStreak) {
+        setDisplayedScore(pointsStreak);
         clearInterval(timer);
       } else {
         setDisplayedScore(Math.round(currentScore));
@@ -44,7 +51,7 @@ export default function Header() {
     }, frameRate);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [pointsStreak]);
 
   return (
     <View style={{ height: `${HEADER_HEIGHT}vh` }} className="w-full overflow-hidden">
@@ -95,7 +102,7 @@ export default function Header() {
                 textShadowRadius: 5,
               }}
             >
-              COS coins collected
+              Points Earned
             </Text>
           </View>
         </View>

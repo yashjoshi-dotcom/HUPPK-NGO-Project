@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, Button } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { useAudioPlayer } from 'expo-audio';
@@ -12,6 +12,7 @@ export default function GameScreen() {
   const [isCorrect, setIsCorrect] = useState(false);
   const [explanation, setExplanation] = useState('');
   const [selectedId, setSelectedId] = useState(null);
+  const [cele,setCele] =useState(false);
   
   // State to hold the resolved sound URIs
   const [soundURIs, setSoundURIs] = useState({ correct: null, incorrect: null });
@@ -67,23 +68,25 @@ export default function GameScreen() {
 
     if (isCorrectAnswer) {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      setCele(true);
     } else {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
     }
-
-    await playSound(isCorrectAnswer);
     setModalVisible(true);
+    await playSound(isCorrectAnswer);
   };
   
   const handleNextQuestion = () => {
     setModalVisible(false);
     setSelectedId(null);
+    setCele(false);
     const nextIndex = (currentQuestionIndex + 1) % gameQuestions.length;
     setCurrentQuestionIndex(nextIndex);
   };
 
   const handleTryAgain = () => {
     setModalVisible(false);
+    setCele(false);
     setSelectedId(null);
   };
 
@@ -97,7 +100,7 @@ export default function GameScreen() {
 
   return (
     <View style={styles.container}>
-      {isCorrect && modalVisible && (
+      {cele && (
         <ConfettiCannon count={200} origin={{x: -10, y: 0}} autoStart={true} />
       )}
 
@@ -131,7 +134,9 @@ export default function GameScreen() {
         animationType="slide"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}>
+        onRequestClose={() => {
+          setModalVisible(false)
+          setCele(false)}}>
         <View style={styles.modalContainer}>
           <View style={styles.modalView}>
             <Text style={styles.modalTitle}>{isCorrect ? 'Correct!' : 'Try Again!'}</Text>

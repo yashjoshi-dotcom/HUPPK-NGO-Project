@@ -7,6 +7,7 @@ import '../styles/global.css';
 import { StyleSheet } from 'react-native';
 import { enableScreens } from 'react-native-screens';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { StreakProvider } from '../hooks/steakContext.js';
 
 enableScreens(); 
 
@@ -41,10 +42,17 @@ function RootLayoutNav() {
   return (
      <GestureHandlerRootView style={styles.flex}>
     <PaperProvider theme={paperTheme}>
+      <StreakProvider>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="choiceBoards/ChoiceBoards" options={{ title: 'Choice Boards' }} />
+        <Stack.Screen name="(stack)/sortnumbers" options={{ title: 'Number Sort' }} />
+        <Stack.Screen name="(stack)/sorting" options={{ title: 'Odd Even Sort' }} />
+        <Stack.Screen name="(stack)/classify" options={{ title: 'Classify' }} />
+        <Stack.Screen name="(stack)/game" options={{ title: 'Game' }} />
+
       </Stack>
+      </StreakProvider>
       
     </PaperProvider>
     </GestureHandlerRootView>

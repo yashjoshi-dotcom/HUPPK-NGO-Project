@@ -1,17 +1,19 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Animated, Dimensions, PanResponder, Text, TouchableOpacity, View } from 'react-native';
+import { useRouter } from 'expo-router';
 
 // Custom horizontal scrolling implementation that bypasses potential gesture conflicts
 export default function GameList() {
   // Create animated value for horizontal position
   const scrollX = new Animated.Value(0);
-  const { width } = Dimensions.get('window');
-  
+  //const { width } = Dimensions.get('window');
+  const router = useRouter();
   // Game data
   const games = [
-    { id: '1', title: 'Picture Quiz', icon: 'images-outline', color: 'bg-purple-300', iconColor: 'bg-purple-400' },
-    { id: '2', title: 'Sorting Game', icon: 'swap-horizontal-outline', color: 'bg-yellow-300', iconColor: 'bg-yellow-400' },
-    { id: '3', title: 'Emotion Game', icon: 'happy-outline', color: 'bg-blue-300', iconColor: 'bg-blue-400' },
+    { id: '1', title: 'Picture Quiz', icon: 'images-outline', color: 'bg-purple-300', iconColor: 'bg-purple-400', link : '(stack)/sortnumbers' },
+    { id: '2', title: 'Sorting Game', icon: 'swap-horizontal-outline', color: 'bg-yellow-300', iconColor: 'bg-yellow-400', link : '(stack)/sorting' },
+    { id: '3', title: 'Sorting Game', icon: 'swap-horizontal-outline', color: 'bg-yellow-300', iconColor: 'bg-yellow-400', link : '(stack)/game' },
+    { id: '4', title: 'Fruit Game', icon: 'happy-outline', color: 'bg-blue-300', iconColor: 'bg-blue-400', link : '(stack)/classify' },
   ];
 
   // Create pan responder to handle horizontal swipes
@@ -79,7 +81,9 @@ export default function GameList() {
               icon={game.icon}
               color={game.color}
               iconColor={game.iconColor}
-              onPress={() => console.log(`${game.title} pressed`)}
+              onPress={() => {
+                router.push(game.link);
+                console.log(`${game.title} pressed`)}}
             />
           ))}
         </Animated.View>
