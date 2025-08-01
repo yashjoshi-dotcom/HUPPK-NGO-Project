@@ -17,7 +17,7 @@ export default function ChoiceBoards() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#fff' }}>
+    <View className="flex flex-column bg-white" >
       {/* Refined Header Section */}
       <View style={styles.headerContainer}>
         <View style={styles.headerLeft}>
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   
   // Existing styles with adjustments
   scrollContainer: {
-    flex: 1,
+    // flex: 1,
     padding: 10,    
     marginBottom: 70,
   },
