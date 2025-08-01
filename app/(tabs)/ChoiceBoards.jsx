@@ -1,20 +1,47 @@
 import { ScrollView, StyleSheet, Image, View, TouchableOpacity, Linking, Text as RNText } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../../hooks/useThemeContext'; // Adjust path if needed
 
 export default function ChoiceBoards() {
   const router = useRouter();
+  const { theme, toggleTheme } = useTheme ? useTheme() : { theme: { mode: 'normal' }, toggleTheme: () => {} };
 
   const handleIQTestPress = () => {
-    Linking.openURL('https://example.com/iq-test'); // Replace with actual IQ test link
+    Linking.openURL('https://example.com/iq-test');
   };
 
   const handleEmotionTestPress = () => {
-    router.push('EmotionalChoices'); // Ensure this route/screen exists
+    router.push('EmotionalChoices');
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View className="flex flex-column bg-white" >
+      {/* Refined Header Section */}
+      <View style={styles.headerContainer}>
+        <View style={styles.headerLeft}>
+          <TouchableOpacity 
+            onPress={() => router.back()}
+            style={styles.backButton}
+          >
+            <Ionicons name="arrow-back" size={24} color="black" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Learning Zone</Text>
+        </View>
+        
+        <TouchableOpacity
+          onPress={toggleTheme}
+          style={styles.headphoneButton}
+        >
+          <Ionicons
+            name={theme?.mode === 'calming' ? 'headset' : 'headset-outline'}
+            size={22}
+            color="white"
+          />
+        </TouchableOpacity>
+      </View>
+
       {/* Fixed IQ Box */}
       <View style={styles.fixedBox}>
         {/* IQ Box */}
@@ -38,7 +65,7 @@ export default function ChoiceBoards() {
       </View>
 
       {/* Scrollable Content */}
-      <ScrollView style={styles.scrollContainer} contentContainerStyle={{ paddingTop: 320 }}>
+      <ScrollView style={styles.scrollContainer} contentContainerStyle={{ paddingTop: 310 }}>
         <Card style={styles.card} onPress={() => router.push('choiceBoards/ChoiceBoards', { type: 'Clothes' })}>
           <Image
             source={require('../../assets/images/choiceBoards/clothes.jpg')}
@@ -80,9 +107,47 @@ export default function ChoiceBoards() {
 }
 
 const styles = StyleSheet.create({
+  // Updated header styles
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingTop: 8, 
+    paddingBottom: 8,
+    backgroundColor: 'white',
+    height: 60,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+    zIndex: 20,
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  backButton: {
+    padding: 4,
+    marginRight: 8,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  headphoneButton: {
+    width: 35,
+    height: 35,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#CBD5E1',
+  },
+  
+  // Existing styles with adjustments
   scrollContainer: {
-    flex: 1,
-    padding: 10,
+    // flex: 1,
+    padding: 10,    
+    marginBottom: 70,
   },
   card: {
     marginBottom: 16,
@@ -97,12 +162,10 @@ const styles = StyleSheet.create({
   },
   fixedBox: {
     position: 'absolute',
-    // top: 10,
-    // left: 20,
-    // right: 20,
+    top: 60, // Increased from 60 to add space after header
+    paddingTop: 15, // Added additional padding at the top
     zIndex: 10,
     width: '100%',
-    // elevation: 5,
     backgroundColor: 'white',
   },
   iqBox: {
@@ -119,7 +182,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.4,
     shadowRadius: 8,
-
     // Android elevation
     elevation: 25,
   },
