@@ -13,7 +13,7 @@ const ChoiceBoardsView = ({ data = [] }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [soundURIs, setSoundURIs] = useState({ correct: null, incorrect: null });
-  const {pointsStreak,incrementPointsStreak}=useStreak();
+  const {incrementPointsStreak}=useStreak();
 
   const currentItem = data[currentIndex];
   const player = useAudioPlayer();
@@ -51,7 +51,7 @@ const ChoiceBoardsView = ({ data = [] }) => {
     const soundURI = isCorrectVal ? soundURIs.correct?.uri : soundURIs.incorrect?.uri;
     setIsCorrect(isCorrectVal);
     setModalVisible(true);
-    incrementPointsStreak((isCorrectVal ? 100 : 0));
+    incrementPointsStreak((isCorrectVal ? currentItem.points : 0));
     if (soundURI) await playSound(player, soundURI);
   };
 
@@ -94,8 +94,9 @@ const ChoiceBoardsView = ({ data = [] }) => {
           <View className="w-full h-56 rounded-t-3xl overflow-hidden">
             <Image
               source={currentItem.image}
-              className="w-full h-full"
               resizeMode={currentItem.resize || 'contain'}
+              width={'100%'}
+              height={'100%'}
             />
           </View>
 

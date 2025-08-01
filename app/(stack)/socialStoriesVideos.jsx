@@ -1,18 +1,51 @@
+import React, { useEffect, useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { VideoView, useVideoPlayer } from 'expo-video';
-import { FlatList, Image, StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
-import { videoListData } from '../data/videosData';
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { videoListData } from '../../constants/data/videosData.js';
 
-
+// Native fetch-based internet checker
+const checkInternet = async () => {
+  try {
+    const res = await fetch('https://www.youtube.com', { method: 'HEAD' });
+    return res.ok;
+  } catch (err) {
+    return false;
+  }
+};
 
 const SocialStoriesVideos = () => {
-  const route = useRoute();
-  const navigation = useNavigation();
+  const router = useRouter();
+  const { videoId } = useLocalSearchParams();
 
-  const { videoId } = route.params || {};
-  const index = videoListData.findIndex((item) => item.id === videoId);
-  const currentVideo = index >= 0 ? videoListData[index] : null;
+  const [filteredVideos, setFilteredVideos] = useState([]);
+  const [currentVideo, setCurrentVideo] = useState(null);
+
+  useEffect(() => {
+    const handleData = async () => {
+      const isConnected = await checkInternet();
+
+      const availableVideos = isConnected
+        ? videoListData
+        : videoListData.filter(v => !v.videoUrl?.toString().startsWith('http'));
+
+      setFilteredVideos(availableVideos);
+
+      const index = availableVideos.findIndex(item => item.id === videoId);
+      setCurrentVideo(index >= 0 ? availableVideos[index] : null);
+    };
+
+    handleData();
+  }, [videoId]);
 
   // Initialize player only if video is valid
   const player = useVideoPlayer(currentVideo?.videoUrl, (playerInstance) => {
@@ -21,10 +54,8 @@ const SocialStoriesVideos = () => {
   });
 
   if (!currentVideo) {
-    console.warn('Video not found for ID:', videoId);
     return (
       <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>Video not found.</Text>
       </View>
     );
   }
@@ -32,8 +63,9 @@ const SocialStoriesVideos = () => {
   const renderOtherVideo = ({ item }) => (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate('socialStoriesVideos', {
-          videoId: item.id,
+        router.push({
+          pathname: 'socialStoriesVideos',
+          params: { videoId: item.id },
         });
       }}
       style={styles.videoCard}
@@ -67,7 +99,9 @@ const SocialStoriesVideos = () => {
       <View style={styles.likesContainer}>
         <TouchableOpacity
           style={styles.likesBox}
-          onPress={() => ToastAndroid.show('🌟 Thanks! We’ll find more good videos for you!🎉', ToastAndroid.LONG)}
+          onPress={() =>
+            ToastAndroid.show('🌟 Thanks! We’ll find more good videos for you!🎉', ToastAndroid.LONG)
+          }
         >
           <FontAwesome name="thumbs-up" size={18} color="#fff" />
         </TouchableOpacity>
@@ -76,7 +110,9 @@ const SocialStoriesVideos = () => {
 
         <TouchableOpacity
           style={styles.likesBox}
-          onPress={() => ToastAndroid.show('👍Thanks! We’ll show different videos for you!🎥✨', ToastAndroid.LONG)}
+          onPress={() =>
+            ToastAndroid.show('👍Thanks! We’ll show different videos for you!🎥✨', ToastAndroid.LONG)
+          }
         >
           <FontAwesome name="thumbs-down" size={18} color="#fff" />
         </TouchableOpacity>
@@ -84,7 +120,7 @@ const SocialStoriesVideos = () => {
 
       {/* Other Videos */}
       <FlatList
-        data={videoListData.filter((_, i) => i !== index)}
+        data={filteredVideos.filter((v) => v.id !== currentVideo.id)}
         renderItem={renderOtherVideo}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: 20 }}

@@ -59,7 +59,8 @@ export default function HomeScreen() {
   return (
     <SafeAreaView className="flex-1 bg-gray-50">
       <StatusBar barStyle="light-content" />
-      <ScrollView>
+      {/* --- REMOVE nestedScrollEnabled={true} --- */}
+      <ScrollView scrollEventThrottle={16}>
         <Header />
         <GameList />
         <Modal visible={popUpVisible} onDismiss={() => setPopupVisible(false)} contentContainerStyle={containerStyle}  >

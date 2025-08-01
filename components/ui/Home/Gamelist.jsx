@@ -1,93 +1,107 @@
+import React from 'react';
+import { View, Text, TouchableOpacity, FlatList, StyleSheet, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Animated, Dimensions, PanResponder, Text, TouchableOpacity, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter } from 'expo-router'; // Use expo-router if that's what you're using
 
-// Custom horizontal scrolling implementation that bypasses potential gesture conflicts
 export default function GameList() {
-  // Create animated value for horizontal position
-  const scrollX = new Animated.Value(0);
-  //const { width } = Dimensions.get('window');
   const router = useRouter();
+  
   // Game data
   const games = [
-    { id: '1', title: 'Picture Quiz', icon: 'images-outline', color: 'bg-purple-300', iconColor: 'bg-purple-400', link : '(stack)/sortnumbers' },
-    { id: '2', title: 'Sorting Game', icon: 'swap-horizontal-outline', color: 'bg-yellow-300', iconColor: 'bg-yellow-400', link : '(stack)/sorting' },
-    { id: '3', title: 'Sorting Game', icon: 'swap-horizontal-outline', color: 'bg-yellow-300', iconColor: 'bg-yellow-400', link : '(stack)/game' },
-    { id: '4', title: 'Fruit Game', icon: 'happy-outline', color: 'bg-blue-300', iconColor: 'bg-blue-400', link : '(stack)/classify' },
+    { id: '4', title: 'Fruit or Veggie?', icon: 'grid-outline', color: '#FFB6C1', iconColor: '#F87171', link : '(stack)/classify' },
+    { id: '3', title: 'Shadow Friends', icon: 'happy-outline', color: '#87CEFA', iconColor: '#60A5FA', link : '(stack)/game' },
+    { id: '2', title: 'Even or Odd?', icon: 'swap-horizontal-outline', color: '#FFDE59', iconColor: '#FACC15', link : '(stack)/sorting'  },
+    { id: '1', title: 'Line Up the Numbers!', icon: 'images-outline', color: '#D8B5FF', iconColor: '#C084FC', link : '(stack)/sortnumbers' },
+    
+    
+    
   ];
 
-  // Create pan responder to handle horizontal swipes
-  const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onMoveShouldSetPanResponder: (_, gestureState) => {
-      // Only respond to horizontal gestures
-      return Math.abs(gestureState.dx) > Math.abs(gestureState.dy);
-    },
-    onPanResponderGrant: () => {
-      scrollX.setOffset(scrollX._value);
-    },
-    onPanResponderMove: (_, gestureState) => {
-      scrollX.setValue(gestureState.dx);
-    },
-    onPanResponderRelease: () => {
-      scrollX.flattenOffset();
-    }
-  });
+  const handleGamePress = (game) => {
+    router.push(game.link);
+    console.log(`${game.title} pressed`);
+    // Navigate to the appropriate screen
+  };
 
-  // Game card component
-  const GameCard = ({ title, icon, color, iconColor, onPress }) => (
+  // Game card renderer
+  const renderGameCard = ({ item }) => (
     <TouchableOpacity
-      className={`rounded-3xl p-4 justify-between mr-4 ${color}`}
-      onPress={onPress}
-      style={{
-        width: 160,
-        height: 160,
-        flexShrink: 0,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
-      }}
+      style={[styles.gameCard, { backgroundColor: item.color }]}
+      onPress={() => handleGamePress(item)}
+      activeOpacity={0.9}
     >
-      <View className={`w-10 h-10 rounded-full justify-center items-center ${iconColor}`}>
-        <Ionicons name={icon} size={24} color="white" />
+      <View style={[styles.iconContainer, { backgroundColor: item.iconColor }]}>
+        <Ionicons name={item.icon} size={24} color="white" />
       </View>
-      <Text className="text-black text-lg font-bold">{title}</Text>
+      <Text style={styles.gameTitle}>{item.title}</Text>
     </TouchableOpacity>
   );
 
   return (
-    <View className="mt-6 px-5">
-      <Text className="text-2xl font-bold text-gray-800 mb-4">Let's Play!</Text>
+    <View style={styles.container}>
+      <Text style={styles.sectionTitle}>Let's Play!</Text>
       
-      {/* Container with fixed height and overflow visible */}
-      <View style={{ height: 180, overflow: 'visible' }}>
-        {/* Non-scrollable View with absolute positioning and manual transformation */}
-        <Animated.View
-          {...panResponder.panHandlers}
-          style={{
-            flexDirection: 'row',
-            position: 'absolute',
-            transform: [{ translateX: scrollX }],
-            height: 160,
-            alignItems: 'center',
-          }}
-        >
-          {games.map(game => (
-            <GameCard
-              key={game.id}
-              title={game.title}
-              icon={game.icon}
-              color={game.color}
-              iconColor={game.iconColor}
-              onPress={() => {
-                router.push(game.link);
-                console.log(`${game.title} pressed`)}}
-            />
-          ))}
-        </Animated.View>
-      </View>
+      <FlatList
+        data={games}
+        renderItem={renderGameCard}
+        keyExtractor={(item) => item.id}
+        horizontal={true} // This is correct
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.gamesList}
+        // The rest of your optimization props are fine
+        initialNumToRender={4}
+        windowSize={5}
+        removeClippedSubviews={Platform.OS === 'android'}
+        getItemLayout={(data, index) => ({
+          length: 172,
+          offset: 172 * index,
+          index,
+        })}
+      />
     </View>
   );
 }
+
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 24,
+    paddingBottom: 16,
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#1f2937',
+    marginBottom: 16,
+    paddingHorizontal: 16,
+  },
+  gamesList: {
+    paddingLeft: 16,
+    paddingRight: 8,
+  },
+  gameCard: {
+    width: 160,
+    height: 160,
+    borderRadius: 24,
+    padding: 16,
+    marginRight: 12,
+    justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  gameTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+});
