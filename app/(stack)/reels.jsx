@@ -1,5 +1,6 @@
 import { FontAwesome } from '@expo/vector-icons';
-import { useFocusEffect, useRoute } from '@react-navigation/native';
+import { useLocalSearchParams } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
 import { useEvent } from 'expo';
 import { VideoView, useVideoPlayer } from 'expo-video';
 import { useCallback, useRef, useState } from 'react';
@@ -13,13 +14,12 @@ import {
   View,
 } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
-import { shortsData } from '../data/videosData.js';
+import { shortsData } from '../../constants/data/videosData.js';
 
 const { height, width } = Dimensions.get('window');
 
 const ReelsScreen = () => {
-  const route = useRoute();
-  const initialIndex = route.params?.initialIndex || 0;
+  const { initialIndex } = useLocalSearchParams();
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [pausedStates, setPausedStates] = useState(shortsData.map(() => false));
   const [showPauseIcon, setShowPauseIcon] = useState(false);
@@ -39,10 +39,6 @@ const ReelsScreen = () => {
         carouselRef.current.scrollTo({ index: initialIndex, animated: false });
       }
       handleSnapToItem(initialIndex);
-
-      return () => {
-        players.forEach((player) => player.pause());
-      };
     }, [initialIndex])
   );
 
@@ -67,7 +63,7 @@ const ReelsScreen = () => {
   const handleSnapToItem = (index) => {
     setCurrentIndex(index);
     players.forEach((player, i) => {
-      if (i === index) {
+      if (i == index) {
         player.play();
       } else {
         player.pause();
