@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../../hooks/useThemeContext';
 
 // --- ASSET DEFINITIONS ---
-const landscapeBg = { uri: 'https://img.freepik.com/free-vector/gradient-mountain-landscape_52683-77407.jpg' };
+const landscapeBg = require('../../../assets/images/gradient-mountain-landscape_52683-77407.avif');
 const avatar = require('../../../assets/images/image-removebg-preview.png');
 // --------------------------
 
