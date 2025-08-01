@@ -6,7 +6,7 @@ export default function ChoiceBoards() {
   const router = useRouter();
 
   const handleIQTestPress = () => {
-    Linking.openURL('https://example.com/iq-test'); // Replace with actual IQ test link
+    Linking.openURL('https://www.mentalupiqtest.com/test/quick-iq-test'); // Replace with actual IQ test link
   };
 
   const handleEmotionTestPress = () => {

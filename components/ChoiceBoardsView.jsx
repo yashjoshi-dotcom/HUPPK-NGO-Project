@@ -5,6 +5,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useAudioPlayer } from 'expo-audio';
 import { loadSound,playSound } from '../utils/Sound';
 import ConfettiCannon from 'react-native-confetti-cannon';
+import { useStreak } from '../hooks/steakContext';
 
 const ChoiceBoardsView = ({ data = []}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -13,6 +14,7 @@ const ChoiceBoardsView = ({ data = []}) => {
   const [isCorrect, setIsCorrect] = useState(false);
   const currentItem = data[currentIndex];
   const [soundURIs, setSoundURIs] = useState({ correct: null, incorrect: null });
+  const {pointsStreak,incrementPointsStreak}=useStreak();
   
   const player = useAudioPlayer();
 
@@ -31,12 +33,11 @@ const ChoiceBoardsView = ({ data = []}) => {
     }
   }, [currentIndex]); 
 
-  
-
-  const handleAnswer = async (questionId, value) => {
+  const handleAnswer = async (questionId, value, points) => {
     const isCorrectVal = (value === currentItem.correctAnswer);
     const soundURI = isCorrectVal ? soundURIs.correct?.uri : soundURIs.incorrect?.uri;
     setIsCorrect(isCorrectVal);
+    incrementPointsStreak(points);
     setModalVisible(true);
     if (soundURI) {
       await playSound(player, soundURI);
@@ -60,6 +61,24 @@ const ChoiceBoardsView = ({ data = []}) => {
           <Text>Loading Boards...</Text>
         </View>
       );
+  }
+
+  const CorrectAnswerResponse = ({points}) => {
+    return (
+      <View className="text-yellow-600">
+        <View className="flex flex-row items-center justify-center mb-4">
+        <Text className="text-4xl font-bold text-red-600 "> + {points}</Text>
+        <View className="w-10 h-10" >
+        <Image
+          source={require('../assets/images/coins.png')}
+          style={{ width: "100%", height: "100%"}}
+          resizeMode="contain"
+          />
+          </View>
+        </View>
+        <Text className="text-xl ">Correct! You earned {points} points</Text>
+      </View>
+    )
   }
 
   return (
@@ -102,7 +121,7 @@ const ChoiceBoardsView = ({ data = []}) => {
               style={styles.accordion}
             >
               <RadioButton.Group
-                onValueChange={value => handleAnswer(currentItem.id, value)}
+                onValueChange={value => handleAnswer(currentItem.id, value, currentItem.points)}
               >
                 {currentItem.options.map(opt => (
                   <RadioButton.Item
@@ -128,7 +147,7 @@ const ChoiceBoardsView = ({ data = []}) => {
         onRequestClose={() => setModalVisible(false)}>
         <View style={styles.modalContainer}>
           <View style={styles.modalView}>
-            <Text style={styles.modalTitle}>{isCorrect ? '✅ Correct! Great job!' : '❌ Incorrect. Try again!'}</Text>
+            <Text style={styles.modalTitle}>{isCorrect ? <CorrectAnswerResponse points={currentItem.points} /> : '❌ Incorrect. Try again!'}</Text>
             {isCorrect ? (
               <Button title="Next Question" onPress={handleNextQuestion} />
             ) : (
@@ -175,7 +194,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 15,
-    color:"black"
+    // color:"black"
   },
   modalText: {
     marginBottom: 15,
@@ -198,7 +217,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#333',
+    // color: '#333',
   },
   accordion: {
     backgroundColor: '#e4f0fa',

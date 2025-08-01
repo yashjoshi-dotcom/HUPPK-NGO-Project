@@ -14,6 +14,7 @@ export const quizData = [
     correctAnswer: 'tshirts',
     correctSound: require('../assets/audio/correct.mp3'),
     incorrectSound: require('../assets/audio/incorrect.mp3'),
+    points: 10,
   },
   {
     id: 'q2',
@@ -30,5 +31,6 @@ export const quizData = [
     correctAnswer: 'Umbrella',
     correctSound: require('../assets/audio/correct.mp3'),
     incorrectSound: require('../assets/audio/incorrect.mp3'),
+    points: 10,
   }
 ];

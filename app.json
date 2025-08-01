@@ -41,7 +41,8 @@
       ],
       "expo-audio",
       "expo-video",
-      "expo-asset"
+      "expo-asset",
+      "@react-native-async-storage/async-storage"
     ],
     "experiments": {
       "typedRoutes": true
