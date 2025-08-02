@@ -1,12 +1,22 @@
 import { ScrollView, StyleSheet, Image, View, TouchableOpacity, Linking, Text as RNText } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { Card, Text } from 'react-native-paper';
+import { useIsFocused } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../hooks/useThemeContext'; // Adjust path if needed
+import { Colors } from '../../constants/Colors';
 
 export default function ChoiceBoards() {
   const router = useRouter();
-  const { theme, toggleTheme } = useTheme ? useTheme() : { theme: { mode: 'normal' }, toggleTheme: () => {} };
+  const { theme, toggleTheme, setTheme } = useTheme ? useTheme() : { theme: { mode: 'normal' }, toggleTheme: () => {} };
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (!isFocused && theme.mode === 'calming') {
+      setTheme(Colors.light); // 👈 resets back to light theme
+    }
+  }, [isFocused]);  
 
   const handleIQTestPress = () => {
     Linking.openURL('https://www.mentalupiqtest.com/test/quick-iq-test');
