@@ -45,6 +45,7 @@ export default function SortByDragGame() {
 
     }
     else {
+      incrementPointsStreak(50);
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       Alert.alert(
         '❌ Not Sorted',

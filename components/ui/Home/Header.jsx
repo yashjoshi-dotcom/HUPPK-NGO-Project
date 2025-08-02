@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../../hooks/useThemeContext';
-import { useStreak } from '../../../hooks/steakContext.js';
+import { useStreak } from '../../../hooks/steakContext';
 import { useIsFocused } from '@react-navigation/native';
 import { Colors } from '../../../constants/Colors';
 // --- ASSET DEFINITIONS ---
