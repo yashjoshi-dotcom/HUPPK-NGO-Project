@@ -9,7 +9,7 @@ export default function ChoiceBoards() {
   const { theme, toggleTheme } = useTheme ? useTheme() : { theme: { mode: 'normal' }, toggleTheme: () => {} };
 
   const handleIQTestPress = () => {
-    Linking.openURL('https://example.com/iq-test');
+    Linking.openURL('https://www.mentalupiqtest.com/test/quick-iq-test');
   };
 
   const handleEmotionTestPress = () => {
