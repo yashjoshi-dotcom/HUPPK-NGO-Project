@@ -5,7 +5,7 @@ import {useLocalSearchParams } from 'expo-router';
 import ChoiceBoardsView from '../../components/ChoiceBoardsView.jsx';
 export default function ChoiceBoardsScreen() {
   const { type } = useLocalSearchParams();
-  console.log('ChoiceBoardsScreen type:', type);
+  // console.log('ChoiceBoardsScreen type:', type);
   let data = [];
   if(type === 'Clothes') {
     data = ClothData;

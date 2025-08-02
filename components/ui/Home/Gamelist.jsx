@@ -11,7 +11,7 @@ export default function GameList() {
     { id: '4', title: 'Fruit or Veggie?', icon: 'grid-outline', color: '#FFB6C1', iconColor: '#F87171', link : '(stack)/classify',
       image:require('../../../assets/images/gamescreens/fruits.png') },
     { id: '3', title: 'Shadow Friends', icon: 'happy-outline', color: '#87CEFA', iconColor: '#60A5FA', link : '(stack)/game',
-      image:require('../../../assets/images/gamescreens/shadow.png') },
+      image:require('../../../assets/images/gamescreens/image-removebg-preview.png') },
     { id: '2', title: 'Even or Odd?', icon: 'swap-horizontal-outline', color: '#FFDE59', iconColor: '#FACC15', link : '(stack)/sorting',
       image:require('../../../assets/images/gamescreens/odd.png') },
     { id: '1', title: 'Line Up the Numbers!', icon: 'images-outline', color: '#D8B5FF', iconColor: '#C084FC', link : '(stack)/sortnumbers',
@@ -22,22 +22,22 @@ export default function GameList() {
 
   const handleGamePress = (game) => {
     router.push(game.link);
-    console.log(`${game.title} pressed`);
+    // console.log(`${game.title} pressed`);
     // Navigate to the appropriate screen
   };
 
   // Game card renderer
   const renderGameCard = ({ item }) => (
     <TouchableOpacity
-      style={[styles.gameCard, { backgroundColor: item.color }]}
+      style={[styles.gameCard]}
       onPress={() => handleGamePress(item)}
       activeOpacity={0.9}
     >
       {/* <View style={[styles.iconContainer, { backgroundColor: item.iconColor }]}>
         <Ionicons name={item.icon} size={24} color="white" />
       </View> */}
-      <Image source={item.image} style={{ width: '100%', height: 80, borderRadius: 16 }} resizeMode='cover'/>
-      <Text style={styles.gameTitle}>{item.title}</Text>
+      <Image source={item.image} style={{ width: '100%', height: "100%", borderRadius: 16 }} resizeMode='fill'/>
+      {/* <Text style={styles.gameTitle}>{item.title}</Text> */}
     </TouchableOpacity>
   );
 
@@ -86,20 +86,20 @@ const styles = StyleSheet.create({
   gameCard: {
     width: 160,
     height: 160,
-    borderRadius: 24,
-    padding: 16,
+ //   borderRadius: 24,
+    //padding: 16,
     marginRight: 12,
     justifyContent: 'space-between',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+   // shadowColor: '#000',
+   // shadowOffset: { width: 0, height: 2 },
+  //  shadowOpacity: 0.1,
+    //shadowRadius: 4,
+ //   elevation: 3,
   },
   iconContainer: {
     width: 40,
     height: 40,
-    borderRadius: 20,
+    borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
   },

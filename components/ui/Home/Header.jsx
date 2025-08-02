@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../../hooks/useThemeContext';
-import { useStreak } from '../../../hooks/steakContext.js';
+import { useStreak } from '../../../hooks/steakContext';
 import { useIsFocused } from '@react-navigation/native';
 import { Colors } from '../../../constants/Colors';
 // --- ASSET DEFINITIONS ---
@@ -15,10 +15,9 @@ const screenHeight = Dimensions.get('window').height;
 const HEADER_HEIGHT = screenHeight * 0.55; // 65% of the screen height
 
 export default function Header() {
-  const {pointsStreak, daysStreak, lastLoginDate, updateLastLoginDate, incrementPointsStreak, incrementDaysStreak} = useStreak();
+  const {pointsStreak, daysStreak} = useStreak();
   const [displayedScore, setDisplayedScore] = useState(0);
   // const pointsStreak = pointsStreak || 0; // Fallback to 0 if pointsStreak is undefined
- // console.log('Target score for animation:', pointsStreak," points:", pointsStreak);
   const { theme, toggleTheme, setTheme } = useTheme();
   const isFocused = useIsFocused();
 
@@ -99,17 +98,29 @@ export default function Header() {
       </View>
 
       {/* Layer 4: The Headset Button */}
-      <View className="absolute top-5 right-5 mt-5">
+      <View className="absolute top-5 mx-5 mt-5 flex-row items-center justify-between space-x-3">
+          <View className="flex-1 flex-row items-center">
+              <Image
+              source={require('../../../assets/images/fire.png')}
+              className="w-8 h-8 mb-1"
+              resizeMode="contain"
+              />
+              <Text className="text-white text-xl font-semibold mb-1">
+                {daysStreak}
+              </Text>
+            </View>
+        <View className="flex-row items-center space-x-3">
         <TouchableOpacity
           onPress={toggleTheme}
           className={`w-11 h-11 rounded-full justify-center items-center ${buttonBgClass}`}
-        >
+          >
           <Ionicons
             name={theme.mode === 'calming' ? 'headset' : 'headset-outline'}
             size={26}
             color="white"
-          />
+            />
         </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
