@@ -22,7 +22,7 @@ export default function GameList() {
 
   const handleGamePress = (game) => {
     router.push(game.link);
-    console.log(`${game.title} pressed`);
+    // console.log(`${game.title} pressed`);
     // Navigate to the appropriate screen
   };
 

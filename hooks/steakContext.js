@@ -17,7 +17,7 @@ export const StreakProvider = ({ children }) => {
     // Load streaks from AsyncStorage on mount
     const loadStreaks = async () => {
             const points = await AsyncStorage?.getItem?.(POINTS_KEY);
-            console.log('Loading streaks from AsyncStorage', points);
+            // console.log('Loading streaks from AsyncStorage', points);
             const days = await AsyncStorage?.getItem?.(DAYS_KEY);
             const lastLogin = await AsyncStorage?.getItem?.(LAST_LOGIN_KEY);
             if (points !== null) setPointsStreak(Number(points));
@@ -25,13 +25,13 @@ export const StreakProvider = ({ children }) => {
             if (lastLogin !== null) setLastLoginDate(new Date(lastLogin));
         };
     useEffect(() => {
-        console.log('Loading streaks from AsyncStorage');
+        // console.log('Loading streaks from AsyncStorage');
        
         loadStreaks?.();
     }, []);
 
     const incrementPointsStreak = async (points = 1) => {
-        console.log('Incrementing pointsStreak by:', points);
+        // console.log('Incrementing pointsStreak by:', points);
         const pointsInLocal = await AsyncStorage?.getItem?.(POINTS_KEY);
         let currentPoints = 0;
         if(pointsInLocal != null)

@@ -31,7 +31,7 @@ export default function HomeScreen() {
   useEffect(() => {
   
     if(lastLoginDate === null && daysStreak===0){
-      console.log('No last login date found or daysStreak is 0, setting popup message.');
+      // console.log('No last login date found or daysStreak is 0, setting popup message.');
       setModelContent({
         heading: 'Welcome to HUPPK',
         message: 'You have earned 100 points for starting your streak.',
