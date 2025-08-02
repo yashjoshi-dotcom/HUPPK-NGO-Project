@@ -42,20 +42,20 @@ export const shortsData = [
       views: '25K views',
       videoUrl: Reel4,
     },
-    {
-      id: '5',
-      thumbnail: { uri: 'https://images.pexels.com/photos/29276537/pexels-photo-29276537.jpeg' },
-      title: 'Top 5 F1 Tracks',
-      views: '98K views',
-      videoUrl: 'https://videos.pexels.com/video-files/4830364/4830364-uhd_1440_2732_25fps.mp4',
-    },
-    {
-      id: '6',
-      thumbnail: { uri: 'https://images.pexels.com/photos/8342281/pexels-photo-8342281.jpeg' },
-      title: 'The Classroom of the Future',
-      views: '204K views',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
-    },
+    // {
+    //   id: '5',
+    //   thumbnail: { uri: 'https://images.pexels.com/photos/29276537/pexels-photo-29276537.jpeg' },
+    //   title: 'Top 5 F1 Tracks',
+    //   views: '98K views',
+    //   videoUrl: 'https://videos.pexels.com/video-files/4830364/4830364-uhd_1440_2732_25fps.mp4',
+    // },
+    // {
+    //   id: '6',
+    //   thumbnail: { uri: 'https://images.pexels.com/photos/8342281/pexels-photo-8342281.jpeg' },
+    //   title: 'The Classroom of the Future',
+    //   views: '204K views',
+    //   videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+    // },
   ];
   
   export const videoListData = [

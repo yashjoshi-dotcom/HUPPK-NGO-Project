@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import { shortsData } from '../../constants/data/videosData.js';
+import { useStreak } from '../../hooks/steakContext';
 
 const { height, width } = Dimensions.get('window');
 
@@ -24,6 +25,7 @@ const ReelsScreen = () => {
   const [pausedStates, setPausedStates] = useState(shortsData.map(() => false));
   const [showPauseIcon, setShowPauseIcon] = useState(false);
   const carouselRef = useRef(null);
+  const {incrementPointsStreak}=useStreak();
 
   // Create players for all videos
   const players = shortsData.map((item, i) =>
@@ -73,6 +75,7 @@ const ReelsScreen = () => {
       prev.map((_, i) => (i === index ? false : prev[i]))
     );
     setShowPauseIcon(false);
+    incrementPointsStreak(100); // Increment points streak for viewing a reel
   };
 
   return (
