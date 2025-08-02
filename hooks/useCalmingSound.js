@@ -4,7 +4,7 @@ import { Asset } from 'expo-asset';
 import { useEffect, useState } from 'react';
 
 // Require the audio file to get its module metadata
-const audioModule = require('../assets/audio/child game.mp3');
+const audioModule = require('../assets/audio/morning_in_forest.mp3');
 
 export const useCalmingSound = () => {
   const [soundURI, setSoundURI] = useState(undefined);

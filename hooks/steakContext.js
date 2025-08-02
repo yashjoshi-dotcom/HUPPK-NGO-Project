@@ -28,7 +28,7 @@ export const StreakProvider = ({ children }) => {
     }, []);
 
     const incrementPointsStreak = (points = 1) => {
-        console.log('Incrementing pointsStreak by:', points);
+        // console.log('Incrementing pointsStreak by:', points);
         setPointsStreak?.(prev => prev + points);
         AsyncStorage?.setItem?.(POINTS_KEY, (pointsStreak + points)?.toString?.());
     };
@@ -42,8 +42,14 @@ export const StreakProvider = ({ children }) => {
         AsyncStorage?.setItem?.(LAST_LOGIN_KEY, 'null');
     };
 
+    const resetDaysStreak= ()=>{
+        // console.log('Resetting daysStreak');
+        setDaysStreak?.(0);
+        AsyncStorage?.setItem?.(DAYS_KEY, '0');
+    }
+
     const incrementDaysStreak = () => {
-        console.log('Incrementing daysStreak');
+        // console.log('Incrementing daysStreak');
         setDaysStreak?.(prev => prev + 1);
         AsyncStorage?.setItem?.(DAYS_KEY, (daysStreak + 1)?.toString?.());
     };
@@ -64,6 +70,7 @@ export const StreakProvider = ({ children }) => {
                 resetStorage,
                 incrementDaysStreak,
                 updateLastLoginDate,
+                resetDaysStreak
             }}
         >
             {children}
