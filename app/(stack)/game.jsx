@@ -5,6 +5,7 @@ import { useAudioPlayer } from 'expo-audio';
 import { Asset } from 'expo-asset';
 import { gameQuestions } from '../data/gameData';
 import ConfettiCannon from 'react-native-confetti-cannon';
+import { useStreak } from '../../hooks/steakContext';
 
 export default function GameScreen() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -13,12 +14,30 @@ export default function GameScreen() {
   const [explanation, setExplanation] = useState('');
   const [selectedId, setSelectedId] = useState(null);
   const [cele,setCele] =useState(false);
+  const {incrementPointsStreak}=useStreak();
   
   // State to hold the resolved sound URIs
   const [soundURIs, setSoundURIs] = useState({ correct: null, incorrect: null });
 
   const player = useAudioPlayer();
   const currentQuestion = gameQuestions[currentQuestionIndex];
+  const CorrectAnswerResponse = ({points}) => {
+    return (
+      <View className="text-yellow-600">
+        <View className="flex flex-row items-center justify-center mb-4">
+        <Text className="text-4xl font-bold text-red-600" style={{color:"black"}}> + {points}</Text>
+        <View className="w-10 h-10" >
+        <Image
+          source={require('../../assets/images/coins.png')}
+          style={{ width: "100%", height: "100%"}}
+          resizeMode="contain"
+          />
+          </View>
+        </View>
+        <Text className="text-xl " style={{color:"black"}}>You earned {points} points</Text>
+      </View>
+    )
+  }
 
   // Effect to load sound assets when the question changes
   useEffect(() => {
@@ -68,6 +87,7 @@ export default function GameScreen() {
 
     if (isCorrectAnswer) {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      incrementPointsStreak((isCorrectAnswer ? currentQuestion.points : 0));
       setCele(true);
     } else {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
@@ -139,6 +159,7 @@ export default function GameScreen() {
           setCele(false)}}>
         <View style={styles.modalContainer}>
           <View style={styles.modalView}>
+            <Text style={styles.modalTitle}>{isCorrect ? <CorrectAnswerResponse points={currentQuestion.points} /> : ''}</Text>
             <Text style={styles.modalTitle}>{isCorrect ? 'Correct!' : 'Try Again!'}</Text>
             <Text style={styles.modalText}>{explanation}</Text>
             {isCorrect ? (

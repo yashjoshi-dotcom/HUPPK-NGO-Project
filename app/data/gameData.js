@@ -15,6 +15,7 @@ export const gameQuestions = [
     incorrectExplanation: 'Not quite. Lions and dogs are carnivores or omnivores, not herbivores.',
     correctSound: require('../../assets/audio/correct.mp3'),
     incorrectSound: require('../../assets/audio/incorrect.mp3'),
+    points: 10
   },
   {
     id: 2,
@@ -30,6 +31,7 @@ export const gameQuestions = [
     incorrectExplanation: 'Not quite. While strong, the cow and dog are not known as the king.',
     correctSound: require('../../assets/audio/correct.mp3'),
     incorrectSound: require('../../assets/audio/incorrect.mp3'),
+    points: 10
   },
   {
     id: 3,
@@ -45,6 +47,7 @@ export const gameQuestions = [
     incorrectExplanation: 'Not quite. That is not a fruit.',
     correctSound: require('../../assets/audio/correct.mp3'),
     incorrectSound: require('../../assets/audio/incorrect.mp3'),
+    points: 10
   },
   {
     id: 4,
@@ -60,6 +63,7 @@ export const gameQuestions = [
     incorrectExplanation: 'That doesn\'t go on your feet. Try again!',
     correctSound: require('../../assets/audio/correct.mp3'),
     incorrectSound: require('../../assets/audio/incorrect.mp3'),
+    points: 10
   },
   {
     id: 5,
@@ -75,6 +79,7 @@ export const gameQuestions = [
     incorrectExplanation: 'That is a different shape. Look for the one that is round.',
     correctSound: require('../../assets/audio/correct.mp3'),
     incorrectSound: require('../../assets/audio/incorrect.mp3'),
+    points: 10
   },
   {
     id: 6,
@@ -90,6 +95,7 @@ export const gameQuestions = [
     incorrectExplanation: 'Not quite. That animal lives on land or in water.',
     correctSound: require('../../assets/audio/correct.mp3'),
     incorrectSound: require('../../assets/audio/incorrect.mp3'),
+    points: 10
   },
   {
     id: 7,
@@ -105,6 +111,7 @@ export const gameQuestions = [
     incorrectExplanation: 'That is not used for brushing teeth. Try again!',
     correctSound: require('../../assets/audio/correct.mp3'),
     incorrectSound: require('../../assets/audio/incorrect.mp3'),
+    points: 10
   },
   {
     id: 8,
@@ -120,6 +127,7 @@ export const gameQuestions = [
     incorrectExplanation: 'That animal makes a different sound. Listen for "Moo".',
     correctSound: require('../../assets/audio/correct.mp3'),
     incorrectSound: require('../../assets/audio/incorrect.mp3'),
+    points: 10
   },
   {
     id: 9,
@@ -135,6 +143,7 @@ export const gameQuestions = [
     incorrectExplanation: 'That is a treat, not a healthy snack. Look for the fruit!',
     correctSound: require('../../assets/audio/correct.mp3'),
     incorrectSound: require('../../assets/audio/incorrect.mp3'),
+    points: 10
   },
   {
     id: 10,
@@ -150,6 +159,7 @@ export const gameQuestions = [
     incorrectExplanation: 'That is not a place for sleeping. Find the soft bed.',
     correctSound: require('../../assets/audio/correct.mp3'),
     incorrectSound: require('../../assets/audio/incorrect.mp3'),
+    points: 10
   },
   {
     id: 11,
@@ -165,6 +175,7 @@ export const gameQuestions = [
     incorrectExplanation: 'That is not for writing. Look for the pointy one!',
     correctSound: require('../../assets/audio/correct.mp3'),
     incorrectSound: require('../../assets/audio/incorrect.mp3'),
+    points: 10
   },
   {
     id: 12,
@@ -180,6 +191,7 @@ export const gameQuestions = [
     incorrectExplanation: 'That won\'t help in the rain. Find the one that blocks water.',
     correctSound: require('../../assets/audio/correct.mp3'),
     incorrectSound: require('../../assets/audio/incorrect.mp3'),
+    points: 10
   },
 ];
 
