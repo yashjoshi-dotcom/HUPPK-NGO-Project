@@ -1,124 +1,156 @@
-import { useState,useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Image,Modal , Button} from 'react-native';
+import { useState, useEffect } from 'react';
+import { View, ScrollView, Image, Modal, Pressable,StyleSheet } from 'react-native';
 import { Card, Text, List, RadioButton } from 'react-native-paper';
 import { FontAwesome } from '@expo/vector-icons';
 import { useAudioPlayer } from 'expo-audio';
-import { loadSound,playSound } from '../utils/Sound';
+import { loadSound, playSound } from '../utils/Sound';
 import ConfettiCannon from 'react-native-confetti-cannon';
+import { useStreak } from '../hooks/steakContext';
 
-const ChoiceBoardsView = ({ data = []}) => {
+const ChoiceBoardsView = ({ data = [] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [expanded, setExpanded] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
-  const currentItem = data[currentIndex];
   const [soundURIs, setSoundURIs] = useState({ correct: null, incorrect: null });
-  
+  const {incrementPointsStreak}=useStreak();
+
+  const currentItem = data[currentIndex];
   const player = useAudioPlayer();
 
-  // Effect to load sound assets when the question changes
   useEffect(() => {
     const loadSounds = async () => {
       try {
-       await loadSound(currentItem.correctSound, currentItem.incorrectSound, setSoundURIs);
+        await loadSound(currentItem.correctSound, currentItem.incorrectSound, setSoundURIs);
       } catch (error) {
         console.error("Failed to load game sounds:", error);
       }
     };
-
-    if (currentItem) {
-       loadSounds();
-    }
-  }, [currentIndex]); 
-
-  
+    if (currentItem) loadSounds();
+  }, [currentIndex]);
+   const CorrectAnswerResponse = ({points}) => {
+    return (
+      <View className="text-yellow-600">
+        <View className="flex flex-row items-center justify-center mb-4">
+        <Text className="text-4xl font-bold text-red-600" style={{color:"black"}}> + {points}</Text>
+        <View className="w-10 h-10" >
+        <Image
+          source={require('../assets/images/coins.png')}
+          style={{ width: "100%", height: "100%"}}
+          resizeMode="contain"
+          />
+          </View>
+        </View>
+        <Text className="text-xl " style={{color:"black"}}>Correct! You earned {points} points</Text>
+      </View>
+    )
+  }
 
   const handleAnswer = async (questionId, value) => {
-    const isCorrectVal = (value === currentItem.correctAnswer);
+    const isCorrectVal = value === currentItem.correctAnswer;
     const soundURI = isCorrectVal ? soundURIs.correct?.uri : soundURIs.incorrect?.uri;
     setIsCorrect(isCorrectVal);
     setModalVisible(true);
-    if (soundURI) {
-      await playSound(player, soundURI);
-    }
+    incrementPointsStreak((isCorrectVal ? currentItem.points : 0));
+    if (soundURI) await playSound(player, soundURI);
   };
-  const handleNextQuestion = () => {
-      setModalVisible(false);
-      const nextIndex = (currentIndex + 1) % data.length;
-      setCurrentIndex(nextIndex);
-      setExpanded(true);
-      setIsCorrect(false);
-  };
-  
-    const handleTryAgain = () => {
-      setModalVisible(false);
-    };
 
-   if (!currentItem) {
-      return (
-        <View style={styles.container}>
-          <Text>Loading Boards...</Text>
-        </View>
-      );
+  const handleNextQuestion = () => {
+    setModalVisible(false);
+    const nextIndex = (currentIndex + 1) % data.length;
+    setCurrentIndex(nextIndex);
+    setExpanded(true);
+    setIsCorrect(false);
+  };
+
+  const handlePrevQuestion = () => {
+    setModalVisible(false);
+    const prevIndex = (currentIndex - 1 + data.length) % data.length;
+    setCurrentIndex(prevIndex);
+    setExpanded(true);
+    setIsCorrect(false);
+  };
+
+  const handleTryAgain = () => setModalVisible(false);
+
+  if (!currentItem) {
+    return (
+      <View className="flex-1 justify-center items-center bg-white">
+        <Text>Loading Boards...</Text>
+      </View>
+    );
   }
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1 bg-white text-black-500">
       {isCorrect && modalVisible && (
-         <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 10 }}>
-        <ConfettiCannon count={200} origin={{x: -10, y: 0}} autoStart={true} />
-      </View>
+        <View className="absolute inset-0 z-10">
+          <ConfettiCannon count={200} origin={{ x: -10, y: 0 }} autoStart />
+        </View>
       )}
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Card style={styles.card}>
-          <Image
-            source={currentItem.image}
-            style={styles.image}
-            resizeMode="cover"
-          />
-          <Card.Content>
-            <Text variant="bodyLarge" style={styles.titleText}>
+
+      <ScrollView contentContainerStyle={{ alignItems: 'center' }} className="p-4">
+        <View className="w-[95%] bg-white rounded-3xl shadow-md">
+          <View className="w-full h-56 rounded-t-3xl overflow-hidden">
+            <Image
+              source={currentItem.image}
+              resizeMode={currentItem.resize}
+              className="w-full h-full"
+            />
+          </View>
+
+          <View className="px-4 py-3">
+            <Text className="text-lg font-bold text-black-500 mb-2" style={{color:"black"}}>
               {currentItem.title}
             </Text>
-          </Card.Content>
+          </View>
 
           <List.Section>
             <List.Accordion
               title={currentItem.question}
               expanded={expanded}
-              onPress={() => setExpanded(expanded => !expanded)}
+              onPress={() => setExpanded(prev => !prev)}
               titleNumberOfLines={0}
               left={() => (
-                <FontAwesome name="question-circle" size={20} style={styles.iconLeft} />
+                <FontAwesome name="question-circle" size={20} color="#388e3c" className="ml-2" />
               )}
               right={() => (
                 <FontAwesome
                   name={expanded ? 'angle-up' : 'angle-down'}
                   size={20}
-                  style={styles.iconRight}
+                  color="#388e3c"
+                  className="mr-2"
                 />
               )}
-              titleStyle={styles.accordionTitle}
-              style={styles.accordion}
+              titleStyle={{ fontWeight: 'bold', color: '#2c3e50' }}
+              style={{ backgroundColor: '#e0f7e9' }}
             >
-              <RadioButton.Group
-                onValueChange={value => handleAnswer(currentItem.id, value)}
-              >
+              <RadioButton.Group onValueChange={val => handleAnswer(currentItem.id, val)}>
                 {currentItem.options.map(opt => (
                   <RadioButton.Item
                     key={opt.value}
                     label={opt.label}
                     value={opt.value}
-                    labelStyle={styles.radioLabel}
-                    color="black"
-                    uncheckedColor="black" 
-                    style={styles.radioItem}
+                    labelStyle={{ fontSize: 16, color: '#2c3e50' }}
+                    color="#2e7d32"
+                    uncheckedColor="#888"
+                    style={{ paddingHorizontal: 16 }}
                   />
                 ))}
               </RadioButton.Group>
             </List.Accordion>
           </List.Section>
-        </Card>
+        </View>
+
+        <View className="flex-row justify-between w-full px-6 mt-6">
+          <Pressable onPress={handlePrevQuestion} className="bg-red-500 px-4 py-3 rounded-xl">
+            <Text className="text-white font-bold">⏮ Previous</Text>
+          </Pressable>
+
+          <Pressable onPress={handleNextQuestion} className="bg-green-500 px-4 py-3 rounded-xl">
+            <Text className="text-white font-bold">Next ⏭</Text>
+          </Pressable>
+        </View>
       </ScrollView>
 
       <Modal
@@ -126,14 +158,19 @@ const ChoiceBoardsView = ({ data = []}) => {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalTitle}>{isCorrect ? '✅ Correct! Great job!' : '❌ Incorrect. Try again!'}</Text>
-            {isCorrect ? (
-              <Button title="Next Question" onPress={handleNextQuestion} />
-            ) : (
-              <Button title="Try Again" onPress={handleTryAgain} />
-            )}
+        <View className="flex-1 justify-center items-center bg-black/50">
+          <View className="bg-white rounded-2xl p-6 w-72 items-center">
+            <Text style={styles.modalTitle}>{isCorrect ? <CorrectAnswerResponse points={currentItem.points} /> : ''}</Text>
+            <Text className="text-lg text-black-500 font-bold text-center mb-4" style={{color:"black"}}>
+              {isCorrect ? '🎉 Correct! Great job!' : '❌ That’s not right. Try again!'}
+            </Text>
+            <Pressable
+              onPress={isCorrect ? handleNextQuestion : handleTryAgain}
+              className={isCorrect ? 'bg-green-600 px-6 py-3 rounded-lg' : 'bg-red-700 px-6 py-3 rounded-lg'}>
+              <Text className="text-white font-bold" style={{ textAlign: 'center' }}>
+                {isCorrect ? 'Next Question' : 'Try Again'}
+              </Text>
+            </Pressable>
           </View>
         </View>
       </Modal>
@@ -141,102 +178,12 @@ const ChoiceBoardsView = ({ data = []}) => {
   );
 };
 
+export default ChoiceBoardsView;
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f6f9fc',
-  },
-  scrollContent: {
-    alignItems: 'center',
-    padding: 16,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
   modalTitle: {
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 15,
-    color:"black"
+    // color:"black"
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-    fontSize: 16,
-    lineHeight: 22,
-  },
-  card: {
-    backgroundColor: '#ffffff',
-    width: '95%',
-    borderRadius: 16,
-    elevation: 4,
-    overflow: 'hidden',
-  },
-  image: {
-    width: '100%',
-    height: 200,
-  },
-  titleText: {
-    marginTop: 12,
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  accordion: {
-    backgroundColor: '#e4f0fa',
-    marginTop: 10,
-    padding: 4,
-  },
-  accordionTitle: {
-    color: '#2c3e50',
-    fontWeight: 'bold',
-  },
-  iconLeft: {
-    margin: 10,
-    color: '#0f4c75',
-  },
-  iconRight: {
-    marginRight: 10,
-    color: '#0f4c75',
-  },
-  radioItem: {
-    paddingHorizontal: 16,
-  },
-  radioLabel: {
-    fontSize: 16,
-    color:'black'
-  },
-  feedback: {
-    marginHorizontal: 16,
-    marginTop: 10,
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  navButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 16,
-    gap: 8,
-    marginBottom: 20,
-  },
-});
-
-export default ChoiceBoardsView;
+})

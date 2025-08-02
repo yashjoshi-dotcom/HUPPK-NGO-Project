@@ -6,15 +6,22 @@ import { useCalmingSound } from './useCalmingSound';
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(Colors.light);
+  const [theme, setThemeState] = useState(Colors.light);
   const { toggleSound } = useCalmingSound();
   const toggleTheme = () => {
-    setTheme((prev) => (prev.mode === 'light' ? Colors.calming : Colors.light));
+    setThemeState((prev) => (prev.mode === 'light' ? Colors.calming : Colors.light));
     toggleSound();
   };
 
+  const setTheme = (newTheme) => {
+    if (theme.mode !== newTheme.mode) {
+      toggleSound();
+    }
+    setThemeState(newTheme);
+  };
+
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>
       {children}
     </ThemeContext.Provider>
   );

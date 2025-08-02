@@ -1,162 +1,248 @@
-import React, { useRef, useState } from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, Text, Image, Modal, Pressable } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import * as Haptics from 'expo-haptics';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
-  runOnJS as workletRunOnJS
+  runOnJS,
 } from 'react-native-reanimated';
 import { Card } from 'react-native-paper';
+import { ClassifyData } from '../../constants/Classify';
+import { useStreak } from '../../hooks/steakContext';
 
-const data = [
-  { name: 'Apple', type: 'fruit', image: require('../../assets/images/games/apple.jpg') },
-  { name: 'Carrot', type: 'vegetable', image: require('../../assets/images/games/carrot.jpg') },
-  { name: 'Banana', type: 'fruit', image: require('../../assets/images/games/banana.jpg') },
-];
+const data = ClassifyData;
+
+// [unchanged imports and data array]
 
 export default function ClassifyScreen() {
   const [current, setCurrent] = useState(0);
-  const [score, setScore] = useState(0);
-
-  const rootRef = useRef(null);
-  const fruitRef = useRef(null);
-  const vegRef = useRef(null);
-
-  const dropZones = useRef({
-    fruit: null,
-    vegetable: null,
-  });
+  //const [score, setScore] = useState(0);
+  const [isGameOver, setIsGameOver] = useState(false);
+  const { incrementPointsStreak } = useStreak();
 
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
+  const topZoneScale = useSharedValue(1);
+  const bottomZoneScale = useSharedValue(1);
+  const backgroundColor = useSharedValue('white');
 
-  const measureZone = (ref, key) => {
-    ref.current?.measureLayout(
-      rootRef.current,
-      (x, y, width, height) => {
-        dropZones.current[key] = { x, y, width, height };
-      },
-      () => {}
-    );
-  };
-
-  const measureDropZones = () => {
-    measureZone(vegRef, 'vegetable');
-    measureZone(fruitRef, 'fruit');
-  };
-
-  const isInside = (drop, x, y) => {
-    if (!drop) return false;
+  const CARD_HEIGHT = 220;
+  const THRESHOLD = 100;
+  const handleTryAgain = () => {
+    setCurrent(0);
+    //setScore(0);
+    setIsGameOver(false);
+    translateX.value = withSpring(0);
+    translateY.value = withSpring(0);
+    topZoneScale.value = withSpring(1);
+    bottomZoneScale.value = withSpring(1);
+    backgroundColor.value = 'white';
+  }
+  const CorrectAnswerResponse = ({ points }) => {
     return (
-      x >= drop.x &&
-      x <= drop.x + drop.width &&
-      y >= drop.y &&
-      y <= drop.y + drop.height
-    );
+      <View className="text-yellow-600">
+        <View className="flex flex-row items-center justify-center mb-4">
+          <Text className="text-4xl font-bold text-red-600" style={{ color: "black" }}> + {points}</Text>
+          <View className="w-10 h-10" >
+            <Image
+              source={require('../../assets/images/coins.png')}
+              style={{ width: "100%", height: "100%" }}
+              resizeMode="contain"
+            />
+          </View>
+        </View>
+        <Text className="text-xl " style={{ color: "black" }}>Correct! You earned {points} points</Text>
+      </View>
+    )
+  }
+
+  const flashColor = (color) => {
+    backgroundColor.value = color;
+    setTimeout(() => {
+      backgroundColor.value = 'white';
+    }, 1000);
   };
 
-  const handleDrop = async(gestureX, gestureY) => {
+  const handleSwipe = async () => {
     const item = data[current];
+    const cardTop = translateY.value - CARD_HEIGHT / 2;
+    const cardBottom = translateY.value + CARD_HEIGHT / 2;
 
-    const fruitZone = dropZones.current.fruit;
-    const vegZone = dropZones.current.vegetable;
+    const isTopZoneActive = topZoneScale.value > 1.1;
+    const isBottomZoneActive = bottomZoneScale.value > 1.1;
 
-    if (isInside(fruitZone, gestureX, gestureY) && (item.type === 'fruit')) {
+    if (cardTop < -THRESHOLD && item.type === 'vegetable' && isTopZoneActive) {
+      flashColor('lightgreen');
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      setScore((s) => s + 1);
-      setCurrent((i) => (i + 1) % data.length);
-      
-    } else if (isInside(vegZone, gestureX, gestureY) && (item.type === 'vegetable')) {
+      if (current === data.length - 1) {
+        incrementPointsStreak(100);
+        setIsGameOver(true);
+      }
+      else {
+        //runOnJS(setScore)((s) => s + 1);
+        runOnJS(setCurrent)((i) => (i + 1) % data.length);
+      }
+    } else if (cardBottom > THRESHOLD && item.type === 'fruit' && isBottomZoneActive) {
+      flashColor('lightgreen');
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      setScore((s) => s + 1);
-      setCurrent((i) => (i + 1) % data.length);
+      if (current === data.length - 1) {
+        incrementPointsStreak(100);
+        setIsGameOver(true);
+      }
+      else {
+        //runOnJS(setScore)((s) => s + 1);
+        runOnJS(setCurrent)((i) => (i + 1) % data.length);
+      }
     } else {
-      // Drop missed all zones — optional feedback
+      flashColor('lightcoral');
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      console.warn('Dropped outside zones');
     }
+
+    translateX.value = withSpring(0);
+    translateY.value = withSpring(0);
+    topZoneScale.value = withSpring(1);
+    bottomZoneScale.value = withSpring(1);
   };
 
   const panGesture = Gesture.Pan()
-    .onBegin(() => {
-      workletRunOnJS(measureDropZones)();
-    })
     .onUpdate((e) => {
       translateX.value = e.translationX;
       translateY.value = e.translationY;
+
+      const top = e.translationY - CARD_HEIGHT / 2;
+      const bottom = e.translationY + CARD_HEIGHT / 2;
+
+      topZoneScale.value = withSpring(top < -THRESHOLD ? 1.2 : 1);
+      bottomZoneScale.value = withSpring(bottom > THRESHOLD ? 1.2 : 1);
     })
-    .onEnd((e) => {
-      workletRunOnJS(handleDrop)(e.absoluteX, e.absoluteY);
-      translateX.value = withSpring(0);
-      translateY.value = withSpring(0);
+    .onEnd(() => {
+      runOnJS(handleSwipe)();
     });
 
-  const animatedStyle = useAnimatedStyle(() => ({
+  const animatedCardStyle = useAnimatedStyle(() => ({
     transform: [
       { translateX: translateX.value },
       { translateY: translateY.value },
     ],
+    opacity: 1 - Math.min(Math.abs(translateY.value) / 300, 0.5),
+  }));
+
+  const animatedTopZoneStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: topZoneScale.value }],
+  }));
+
+  const animatedBottomZoneStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: bottomZoneScale.value }],
+  }));
+
+  const animatedContainerStyle = useAnimatedStyle(() => ({
+    backgroundColor: backgroundColor.value,
   }));
 
   const item = data[current];
   if (!item) {
     return (
       <View style={styles.center}>
-        <Text style={{ fontSize: 24 }}>Game Over</Text>
-        <Text style={{ fontSize: 18 }}>Score: {score}</Text>
+        <Text style={{ fontSize: 24 }}>Loading Game........</Text>
       </View>
     );
   }
 
   return (
-    <View style={styles.container} ref={rootRef}>
-      <Text style={styles.score}>Score: {score}</Text>
-      <GestureDetector gesture={panGesture}>
-        <Animated.View style={[styles.card, animatedStyle]}>
-          <Card>
-            <Card.Title title={item.name} />
-            <Card.Content>
-              <Image source={item.image} style={styles.image} />
-            </Card.Content>
-          </Card>
-        </Animated.View>
-      </GestureDetector>
+    <>
+      <Animated.View style={[styles.container, animatedContainerStyle]}>
+        {/* <Text style={styles.score}>Score: {score}</Text> */}
 
-      <View style={styles.zones}>
-        <View style={styles.zone} ref={vegRef}>
-          <Text style={styles.label}>Vegetable Bin</Text>
+        <Animated.View style={[styles.dropZone, animatedTopZoneStyle, { backgroundColor: 'rgba(0,255,0,0.15)', borderColor: 'green' }]}>
+          <Text style={styles.zoneLabel}>🥦 Vegetable</Text>
+        </Animated.View>
+
+        <GestureDetector gesture={panGesture}>
+          <Animated.View style={[styles.card, animatedCardStyle]}>
+            <Card>
+              <Card.Title  titleStyle={{ fontSize: 24 }} title={item.name} />
+              <Image source={item.image} style={styles.image} resizeMode='contain' />
+            </Card>
+          </Animated.View>
+        </GestureDetector>
+
+        <Animated.View style={[styles.dropZone, animatedBottomZoneStyle, { backgroundColor: 'rgba(0,0,255,0.15)', borderColor: 'blue' }]}>
+          <Text style={styles.zoneLabel}>🍎 Fruit</Text>
+        </Animated.View>
+       
+      </Animated.View>
+      {isGameOver && (
+        <View className="flex-1 bg-white text-black-500">
+          <Modal
+          animationType="slide"
+          transparent={true}
+          visible={isGameOver}
+          onRequestClose={() => setIsGameOver(false)}>
+          <View className="flex-1 justify-center items-center bg-black/50">
+            <View className="bg-white rounded-2xl p-6 w-72 items-center">
+              <Text style={styles.modalTitle}>{isGameOver ? <CorrectAnswerResponse points={100} /> : ''}</Text>
+              <Text className="text-lg text-black-500 font-bold text-center mb-4" style={{ color: "black" }}>
+                🎉 Correct! Great job!
+              </Text>
+              <Pressable
+                onPress={() => handleTryAgain()}
+                className='bg-green-600 px-6 py-3 rounded-lg'>
+                <Text className="text-white font-bold" style={{ textAlign: 'center' }}>
+                  Restart
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
         </View>
-        <View style={styles.zone} ref={fruitRef}>
-          <Text style={styles.label}>Fruit Bin</Text>
-        </View>
-      </View>
-    </View>
+      )}
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingTop: 80, alignItems: 'center' },
-  score: { fontSize: 20, marginBottom: 20 },
-  card: { width: 200, height: 220, marginBottom: 20 },
-  image: { width: 100, height: 100, alignSelf: 'center' },
-  zones: {
-    flexDirection: 'row',
-    marginTop: 40,
+  container: {
+    flex: 1,
+    alignItems: 'center',
     justifyContent: 'space-around',
-    width: '100%',
-    paddingHorizontal: 30,
   },
-  zone: {
-    width: 130,
-    height: 130,
-    borderWidth: 2,
-    borderColor: '#666',
+  score: {
+    fontSize: 20,
+  },
+  card: {
+    width: 200,
+    height: 'fit-content',
+  },
+  image: {
+    width: 100,
+    height: 100,
+    alignSelf: 'center',
+  },
+  center: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 12,
   },
-  label: { fontSize: 16 },
-  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  dropZone: {
+    height: 100,
+    width: 220,
+    borderWidth: 2,
+    borderStyle: 'dashed',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  zoneLabel: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 15,
+    // color:"black"
+  },
 });

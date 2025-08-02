@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../../hooks/useThemeContext';
-
+import { useStreak } from '../../../hooks/steakContext.js';
+import { useIsFocused } from '@react-navigation/native';
+import { Colors } from '../../../constants/Colors';
 // --- ASSET DEFINITIONS ---
 const landscapeBg = require('../../../assets/images/gradient-mountain-landscape_52683-77407.png');
 const avatar = require('../../../assets/images/image-removebg-preview.png');
@@ -13,25 +15,38 @@ const screenHeight = Dimensions.get('window').height;
 const HEADER_HEIGHT = screenHeight * 0.55; // 65% of the screen height
 
 export default function Header() {
+  const {pointsStreak, daysStreak, lastLoginDate, updateLastLoginDate, incrementPointsStreak, incrementDaysStreak} = useStreak();
   const [displayedScore, setDisplayedScore] = useState(0);
-  const targetScore = 25982;
-  const { theme, toggleTheme } = useTheme();
+  // const pointsStreak = pointsStreak || 0; // Fallback to 0 if pointsStreak is undefined
+  console.log('Target score for animation:', pointsStreak," points:", pointsStreak);
+  const { theme, toggleTheme, setTheme } = useTheme();
+  const isFocused = useIsFocused();
 
   const buttonBgClass = theme.mode === 'calming' 
     ? 'bg-teal-500' 
     : 'bg-black/20';
+  
+  useEffect(() => {
+    if (!isFocused && theme.mode === 'calming') {
+      setTheme(Colors.light); // 👈 resets back to light theme
+    }
+  }, [isFocused]);  
 
   useEffect(() => {
+    if (pointsStreak === 0) {
+      setDisplayedScore(0);
+      return;
+    }
     const duration = 1200;
     const frameRate = 1000 / 60;
     const totalFrames = Math.round(duration / frameRate);
-    const increment = targetScore / totalFrames;
+    const increment = pointsStreak / totalFrames;
     let currentScore = 0;
 
     const timer = setInterval(() => {
       currentScore += increment;
-      if (currentScore >= targetScore) {
-        setDisplayedScore(targetScore);
+      if (currentScore >= pointsStreak) {
+        setDisplayedScore(pointsStreak);
         clearInterval(timer);
       } else {
         setDisplayedScore(Math.round(currentScore));
@@ -39,7 +54,7 @@ export default function Header() {
     }, frameRate);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [pointsStreak]);
 
   return (
     <View style={{ height: HEADER_HEIGHT }}>

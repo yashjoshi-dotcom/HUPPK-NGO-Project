@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   FlatList,
@@ -9,25 +9,56 @@ import {
   Dimensions,
   ScrollView,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { shortsData, videoListData } from  '../data/videosData'; // Adjust the import path as necessary
+import { useRouter } from 'expo-router';
+import { shortsData, videoListData } from '../../constants/data/videosData.js';
 
 const screenWidth = Dimensions.get('window').width;
-
-
 const CARD_WIDTH = screenWidth * 0.5;
 
+const checkInternet = async () => {
+  try {
+    const response = await fetch('https://www.google.com', { method: 'HEAD' });
+    return response.ok;
+  } catch (err) {
+    return false;
+  }
+};
+
 const HomeScreen = () => {
-  const navigation = useNavigation();
+  const router = useRouter();
+
+  const [isConnected, setIsConnected] = useState(true);
+  const [filteredShorts, setFilteredShorts] = useState([]);
+  const [filteredVideos, setFilteredVideos] = useState([]);
+
+  useEffect(() => {
+    const checkConnection = async () => {
+      const result = await checkInternet();
+      // const result = false; // Simulating offline mode for testing
+      setIsConnected(result);
+      
+      const filteredVideos = result
+        ? videoListData // show all videos when online
+        : videoListData.filter((v) => !v.videoUrl?.toString().startsWith('http')); // show only offline-safe
+      
+      const filteredShorts = result
+        ? shortsData
+        : shortsData.filter((s) => !s.videoUrl?.toString().startsWith('http'));
+      
+      setFilteredVideos(filteredVideos);
+      setFilteredShorts(filteredShorts);
+    };
+
+    checkConnection();
+  }, []);
 
   const renderShortsItem = ({ item, index }) => (
-     // 👈 Log item and index
     <TouchableOpacity
       style={styles.shortsCard}
       onPress={() => {
-        console.log(item, index);
-        navigation.navigate('reels', {
-          initialIndex: index, // 👈 Pass index
+        router.push({
+          pathname: 'reels',
+          params: { initialIndex: index },
         });
       }}
     >
@@ -40,9 +71,9 @@ const HomeScreen = () => {
   const renderVideoItem = ({ item }) => (
     <TouchableOpacity
       onPress={() => {
-        console.log('Video pressed:', item.id);
-        navigation.navigate('socialStoriesVideos', {
-          videoId: item.id, // Pass ID or full object
+        router.push({
+          pathname: 'socialStoriesVideos',
+          params: { videoId: item.id },
         });
       }}
       style={styles.videoCard}
@@ -62,30 +93,31 @@ const HomeScreen = () => {
       </View>
     </TouchableOpacity>
   );
-  
-  
 
   return (
     <ScrollView style={styles.container}>
-      {/* Shorts Section */}
       <Text style={styles.sectionTitle}>Shorts</Text>
-      <FlatList
-        data={shortsData}
-        renderItem={renderShortsItem}
-        keyExtractor={(item) => item.id}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.shortsList}
-      />
+      {
+        <FlatList
+          data={filteredShorts}
+          renderItem={renderShortsItem}
+          keyExtractor={(item) => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.shortsList}
+        />
+      }
 
-      {/* Video Feed Section */}
-      <FlatList
-        data={videoListData}
-        renderItem={renderVideoItem}
-        keyExtractor={(item) => item.id}
-        scrollEnabled={false} // disable nested scroll
-        contentContainerStyle={styles.videoList}
-      />
+      <Text style={styles.sectionTitle}>Videos</Text>
+      {
+        <FlatList
+          data={filteredVideos}
+          renderItem={renderVideoItem}
+          keyExtractor={(item) => item.id}
+          scrollEnabled={false}
+          contentContainerStyle={styles.videoList}
+        />
+      }
     </ScrollView>
   );
 };
@@ -94,6 +126,8 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
+    // marginTop: 30,
+    marginBottom: 50,
     flex: 1,
     backgroundColor: '#121212',
   },
@@ -137,6 +171,8 @@ const styles = StyleSheet.create({
   videoDetails: {
     flexDirection: 'row',
     padding: 8,
+    marginBottom: 10,
+    marginTop: 5,
   },
   channelIcon: {
     width: 36,
@@ -153,5 +189,11 @@ const styles = StyleSheet.create({
     color: '#aaa',
     fontSize: 12,
     marginTop: 2,
+  },
+  offlineText: {
+    color: '#888',
+    fontSize: 14,
+    textAlign: 'center',
+    marginTop: 10,
   },
 });

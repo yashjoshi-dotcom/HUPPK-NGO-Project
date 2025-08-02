@@ -9,7 +9,7 @@ export default function ChoiceBoards() {
   const { theme, toggleTheme } = useTheme ? useTheme() : { theme: { mode: 'normal' }, toggleTheme: () => {} };
 
   const handleIQTestPress = () => {
-    Linking.openURL('https://example.com/iq-test');
+    Linking.openURL('https://www.mentalupiqtest.com/test/quick-iq-test');
   };
 
   const handleEmotionTestPress = () => {
@@ -66,7 +66,7 @@ export default function ChoiceBoards() {
 
       {/* Scrollable Content */}
       <ScrollView style={styles.scrollContainer} contentContainerStyle={{ paddingTop: 310 }}>
-        <Card style={styles.card} onPress={() => router.push('choiceBoards/ChoiceBoards', { type: 'Clothes' })}>
+        <Card style={styles.card} onPress={() => router.push('choiceBoards/ChoiceBoards?type=Clothes')}>
           <Image
             source={require('../../assets/images/choiceBoards/clothes.jpg')}
             style={{ width: '100%', height: 200, borderRadius: 8 }}
@@ -78,7 +78,7 @@ export default function ChoiceBoards() {
           </Card.Content>
         </Card>
 
-        <Card style={styles.card} onPress={() => router.push('choiceBoards/ChoiceBoards', { type: 'RoadSafety' })}>
+        <Card style={styles.card} onPress={() => router.push('choiceBoards/ChoiceBoards?type=RoadSafety')}>
           <Image
             source={require('../../assets/images/choiceBoards/roadsafety.jpg')}
             style={{ width: '100%', height: 200, borderRadius: 8 }}
@@ -90,7 +90,7 @@ export default function ChoiceBoards() {
           </Card.Content>
         </Card>
 
-        <Card style={styles.card} onPress={() => router.push('choiceBoards/ChoiceBoards', { type: 'Food' })}>
+        <Card style={styles.card} onPress={() => router.push('choiceBoards/ChoiceBoards?type=Food')}>
           <Image
             source={require('../../assets/images/choiceBoards/food.jpg')}
             style={{ width: '100%', height: 200, borderRadius: 8 }}
