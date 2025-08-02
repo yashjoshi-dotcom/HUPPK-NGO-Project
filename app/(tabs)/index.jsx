@@ -35,7 +35,7 @@ export default function HomeScreen() {
         message: 'You have earned 100 points for starting your streak.',
       });
       setPopupVisible(true);
-      incrementPointsStreak(100);
+      
       incrementDaysStreak();
       updateLastLoginDate();
       return;
@@ -46,7 +46,6 @@ export default function HomeScreen() {
         message: `You have ${daysStreak || 0} days streak and ${pointsStreak || 0} points.`,
       });
       setPopupVisible(true);
-      incrementPointsStreak(100);
       incrementDaysStreak();
       updateLastLoginDate();
       // resetStorage();

@@ -15,43 +15,68 @@ export const StreakProvider = ({ children }) => {
     const [lastLoginDate, setLastLoginDate] = useState(null);
 
     // Load streaks from AsyncStorage on mount
-    useEffect(() => {
-        const loadStreaks = async () => {
+    const loadStreaks = async () => {
             const points = await AsyncStorage?.getItem?.(POINTS_KEY);
+            console.log('Loading streaks from AsyncStorage', points);
             const days = await AsyncStorage?.getItem?.(DAYS_KEY);
             const lastLogin = await AsyncStorage?.getItem?.(LAST_LOGIN_KEY);
             if (points !== null) setPointsStreak(Number(points));
             if (days !== null) setDaysStreak(Number(days));
             if (lastLogin !== null) setLastLoginDate(new Date(lastLogin));
         };
+    useEffect(() => {
+        console.log('Loading streaks from AsyncStorage');
+       
         loadStreaks?.();
     }, []);
 
-    const incrementPointsStreak = (points = 1) => {
+    const incrementPointsStreak = async (points = 1) => {
         console.log('Incrementing pointsStreak by:', points);
-        setPointsStreak?.(prev => prev + points);
-        AsyncStorage?.setItem?.(POINTS_KEY, (pointsStreak + points)?.toString?.());
+        const pointsInLocal = await AsyncStorage?.getItem?.(POINTS_KEY);
+        let currentPoints = 0;
+        if(pointsInLocal != null)
+        {
+            currentPoints = Number(pointsInLocal);
+        }
+        await AsyncStorage?.setItem?.(POINTS_KEY, (currentPoints + points)?.toString?.());
+        await  loadStreaks?.();
+        setPointsStreak?.(prev => currentPoints + points);
+
     };
 
-    const resetStorage = () => {
+    const resetStorage = async () => {
+       
+        await AsyncStorage?.setItem?.(POINTS_KEY, null);
+        await AsyncStorage?.setItem?.(DAYS_KEY, null);
+        await AsyncStorage?.setItem?.(LAST_LOGIN_KEY, 'null');
         setPointsStreak?.(0);
         setDaysStreak?.(0);
         setLastLoginDate?.(null);
-        AsyncStorage?.setItem?.(POINTS_KEY, null);
-        AsyncStorage?.setItem?.(DAYS_KEY, null);
-        AsyncStorage?.setItem?.(LAST_LOGIN_KEY, 'null');
     };
 
-    const incrementDaysStreak = () => {
+    const incrementDaysStreak = async () => {
         console.log('Incrementing daysStreak');
-        setDaysStreak?.(prev => prev + 1);
-        AsyncStorage?.setItem?.(DAYS_KEY, (daysStreak + 1)?.toString?.());
+        const today = new Date().toDateString();
+        console.log(today);
+        const lastLoginStored = await AsyncStorage?.getItem?.(LAST_LOGIN_KEY);
+        console.log('Last login date is today, not incrementing daysStreak.', lastLoginStored, today);
+        if(lastLoginStored  && new Date(lastLoginStored)?.toDateString() === today )
+        {
+            console.log('Last login date is today, not incrementing daysStreak.');
+            return;
+        }
+        else
+        {
+            await AsyncStorage?.setItem?.(DAYS_KEY, (daysStreak + 1)?.toString?.());
+            setDaysStreak?.(prev => prev + 1);
+            incrementPointsStreak(100);
+        }
     };
 
-    const updateLastLoginDate = () => {
+    const updateLastLoginDate = async () => {
         const today = new Date();
+        await AsyncStorage?.setItem?.(LAST_LOGIN_KEY, today?.toString?.());
         setLastLoginDate?.(today);
-        AsyncStorage?.setItem?.(LAST_LOGIN_KEY, today?.toString?.());
     };
 
     return (

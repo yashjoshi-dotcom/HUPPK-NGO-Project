@@ -18,7 +18,7 @@ export default function Header() {
   const {pointsStreak, daysStreak, lastLoginDate, updateLastLoginDate, incrementPointsStreak, incrementDaysStreak} = useStreak();
   const [displayedScore, setDisplayedScore] = useState(0);
   // const pointsStreak = pointsStreak || 0; // Fallback to 0 if pointsStreak is undefined
-  console.log('Target score for animation:', pointsStreak," points:", pointsStreak);
+ // console.log('Target score for animation:', pointsStreak," points:", pointsStreak);
   const { theme, toggleTheme, setTheme } = useTheme();
   const isFocused = useIsFocused();
 

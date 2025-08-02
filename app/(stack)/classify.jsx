@@ -82,6 +82,7 @@ export default function ClassifyScreen() {
       }
       else {
         //runOnJS(setScore)((s) => s + 1);
+        incrementPointsStreak(50);
         runOnJS(setCurrent)((i) => (i + 1) % data.length);
       }
     } else if (cardBottom > THRESHOLD && item.type === 'fruit' && isBottomZoneActive) {
@@ -93,6 +94,7 @@ export default function ClassifyScreen() {
       }
       else {
         //runOnJS(setScore)((s) => s + 1);
+        incrementPointsStreak(50);
         runOnJS(setCurrent)((i) => (i + 1) % data.length);
       }
     } else {
