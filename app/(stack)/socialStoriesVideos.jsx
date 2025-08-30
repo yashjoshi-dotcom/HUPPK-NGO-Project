@@ -12,6 +12,8 @@ import {
   View,
 } from 'react-native';
 import { videoListData } from '../../constants/data/videosData.js';
+import { useStreak } from '../../hooks/steakContext';
+
 
 // Native fetch-based internet checker
 const checkInternet = async () => {
@@ -29,6 +31,7 @@ const SocialStoriesVideos = () => {
 
   const [filteredVideos, setFilteredVideos] = useState([]);
   const [currentVideo, setCurrentVideo] = useState(null);
+  const {incrementPointsStreak}=useStreak();
 
   useEffect(() => {
     const handleData = async () => {
@@ -45,6 +48,7 @@ const SocialStoriesVideos = () => {
     };
 
     handleData();
+    incrementPointsStreak(200); // Increment points streak for viewing a video
   }, [videoId]);
 
   // Initialize player only if video is valid

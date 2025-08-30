@@ -6,7 +6,7 @@ import Header from '../../components/ui/Home/Header';
 import { useStreak } from '../../hooks/steakContext.js';
 
 export default function HomeScreen() {
-  const { pointsStreak, daysStreak,lastLoginDate,updateLastLoginDate,incrementPointsStreak,incrementDaysStreak } = useStreak();
+  const { pointsStreak, daysStreak,lastLoginDate,updateLastLoginDate,incrementPointsStreak,incrementDaysStreak,resetDaysStreak } = useStreak();
   const [ modelContent, setModelContent] = useState({
     heading: 'Welcome to HUPPK',
     message: '',
@@ -18,43 +18,54 @@ export default function HomeScreen() {
     padding: 20,
     borderRadius: 10,
     marginHorizontal: 20,
-    marginVertical: 100,
+    // marginVertical: 100,
     shadowColor: '#000',
     minHeight: 100,
     justifyContent: 'center',
     alignItems: 'center',
     gap: 10,
+    position: 'absolute',
+    top: 10,
   }; 
   const today = new Date().toDateString();
   useEffect(() => {
-    console.log('Checking lastLoginDate:', lastLoginDate, 'today:', today," daysStreak:", daysStreak, "pointsStreak:", pointsStreak);
+  
     if(lastLoginDate === null && daysStreak===0){
-      console.log('No last login date found or daysStreak is 0, setting popup message.');
+      // console.log('No last login date found or daysStreak is 0, setting popup message.');
       setModelContent({
         heading: 'Welcome to HUPPK',
         message: 'You have earned 100 points for starting your streak.',
       });
       setPopupVisible(true);
-      incrementPointsStreak(100);
+      
       incrementDaysStreak();
       updateLastLoginDate();
       return;
     } else if ( lastLoginDate!=null && lastLoginDate?.toDateString() !== today) {
-      console.log('Last login date is different from today, updating streaks.');
-      setModelContent({
+
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+
+      if (lastLoginDate < yesterday) {
+        resetDaysStreak();
+        setModelContent({
+          heading: 'Streak break!',
+          message: 'Your streak was reset. Start again to increase your streak!',
+        });
+        setPopupVisible(true);
+      }
+      else{
+         setModelContent({
         heading: 'Welcome back!',
         message: `You have ${daysStreak || 0} days streak and ${pointsStreak || 0} points.`,
       });
       setPopupVisible(true);
-      incrementPointsStreak(100);
       incrementDaysStreak();
       updateLastLoginDate();
       // resetStorage();
-    } else {
-      console.log('Last login date is today, no popup needed.');
+      }
     }
   }, [daysStreak, pointsStreak, lastLoginDate]);
-
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50">

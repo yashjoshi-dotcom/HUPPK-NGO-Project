@@ -15,7 +15,7 @@ export const ClothData = [
     correctSound: require('../assets/audio/correct.mp3'),
     incorrectSound: require('../assets/audio/incorrect.mp3'),
     resize: "cover",
-    points: 10,
+    points: 50,
   },
   {
     id: 'q2',
@@ -33,7 +33,7 @@ export const ClothData = [
     correctSound: require('../assets/audio/correct.mp3'),
     incorrectSound: require('../assets/audio/incorrect.mp3'),
     resize: "cover",
-    points: 10,
+    points: 50,
   },
   {
     id: 'q3',
@@ -51,7 +51,7 @@ export const ClothData = [
     correctSound: require('../assets/audio/correct.mp3'),
     incorrectSound: require('../assets/audio/incorrect.mp3'),
     resize: "cover",
-    points: 10,
+    points: 50,
   }
 ];
 
@@ -72,7 +72,7 @@ export const roadSafetyData = [
     correctSound: require('../assets/audio/correct.mp3'),
     incorrectSound: require('../assets/audio/incorrect.mp3'),
     resize: "contain",
-    points: 10,
+    points: 50,
   },
 
   {
@@ -91,7 +91,7 @@ export const roadSafetyData = [
     correctSound: require('../assets/audio/correct.mp3'),
     incorrectSound: require('../assets/audio/incorrect.mp3'),
     resize: "contain",
-    points: 10,
+    points: 50,
   },
   {
     id: 'q2',
@@ -109,7 +109,7 @@ export const roadSafetyData = [
     correctSound: require('../assets/audio/correct.mp3'),
     incorrectSound: require('../assets/audio/incorrect.mp3'),
     resize: "contain",
-    points: 10,
+    points: 50,
   }
 ]
 
@@ -130,7 +130,7 @@ export const FoodData = [
     correctSound: require('../assets/audio/correct.mp3'),
     incorrectSound: require('../assets/audio/incorrect.mp3'),
     resize: 'contain',
-    points: 10,
+    points: 50,
   },
 
   {
@@ -149,7 +149,7 @@ export const FoodData = [
   correctSound: require('../assets/audio/correct.mp3'),
   incorrectSound: require('../assets/audio/incorrect.mp3'),
   resize: "contain",
-  points: 10,
+  points: 50,
 },
  {
   id: 'q3',
@@ -167,7 +167,7 @@ export const FoodData = [
   correctSound: require('../assets/audio/correct.mp3'),
   incorrectSound: require('../assets/audio/incorrect.mp3'),
   resize: 'contain',
-  points: 10,
+  points: 50,
 }
 ]
 

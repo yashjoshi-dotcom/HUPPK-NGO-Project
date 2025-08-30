@@ -66,7 +66,7 @@ export default function GameScreen() {
     const soundURI = isCorrectAnswer ? soundURIs.correct : soundURIs.incorrect;
 
     if (!soundURI || !player) {
-      console.log("Sound URI or player not ready.");
+      // console.log("Sound URI or player not ready.");
       return;
     }
 
