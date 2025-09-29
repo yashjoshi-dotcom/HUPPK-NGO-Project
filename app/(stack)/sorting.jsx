@@ -51,6 +51,7 @@ export default function NumberSortingGame() {
       setTimeout(() => {
         setFlashColor(null);
         if (numbers.length > 1) {
+          incrementPointsStreak(50);
           setNumbers((prev) => {
             const updated = prev.slice(1);
             return updated;

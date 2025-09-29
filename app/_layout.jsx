@@ -50,6 +50,9 @@ function RootLayoutNav() {
         <Stack.Screen name="(stack)/sorting" options={{ title: 'Odd Even Sort' }} />
         <Stack.Screen name="(stack)/classify" options={{ title: 'Classify' }} />
         <Stack.Screen name="(stack)/game" options={{ title: 'Game' }} />
+        <Stack.Screen name="(stack)/EmotionalChoices" options={{ title: 'Emotional Choices' }} />
+        <Stack.Screen name="(stack)/reels" options={{ title: 'Shorts' }} />
+        <Stack.Screen name="(stack)/socialStoriesVideos" options={{ title: 'Videos' }} />
 
       </Stack>
       </StreakProvider>
