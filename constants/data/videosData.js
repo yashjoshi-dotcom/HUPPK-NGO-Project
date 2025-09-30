@@ -41,7 +41,7 @@ export const shortsData = [
       title: 'Healthy habits wash hands before eating',
       views: '25K views',
       videoUrl: Reel4,
-    },
+    }
     // {
     //   id: '5',
     //   thumbnail: { uri: 'https://images.pexels.com/photos/29276537/pexels-photo-29276537.jpeg' },
@@ -85,33 +85,33 @@ export const shortsData = [
       views: '43K views',
       date: '1 day ago',
       videoUrl: Video3,
-    },
-    {
-      id: '4',
-      thumbnail: { uri: 'https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg' }, // Use object with uri key
-      title: 'Playlist make you feel like a boss | Gentleman songs',
-      channel: 'Dark Blues Music',
-      views: '170K views',
-      date: '2 weeks ago',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
-    },
-    {
-      id: '5',
-      thumbnail: { uri: 'https://images.pexels.com/photos/8173471/pexels-photo-8173471.jpeg' }, // Use object with uri key
-      title: 'Legs Workout Easy | Episode 01',
-      channel: 'Gym Bros',
-      views: '210K views',
-      date: '1 week ago',
-      videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
-    },
-    {
-      id: '6',
-      thumbnail: { uri: 'https://images.pexels.com/photos/12795/pexels-photo-12795.jpeg' }, // Use object with uri key
-      title: 'Everything you should know about F1',
-      channel: 'Dark Blues Music',
-      views: '170K views',
-      date: '2 weeks ago',
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
-    },
+    }
+    // {
+    //   id: '4',
+    //   thumbnail: { uri: 'https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg' }, // Use object with uri key
+    //   title: 'Playlist make you feel like a boss | Gentleman songs',
+    //   channel: 'Dark Blues Music',
+    //   views: '170K views',
+    //   date: '2 weeks ago',
+    //   videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+    // },
+    // {
+    //   id: '5',
+    //   thumbnail: { uri: 'https://images.pexels.com/photos/8173471/pexels-photo-8173471.jpeg' }, // Use object with uri key
+    //   title: 'Legs Workout Easy | Episode 01',
+    //   channel: 'Gym Bros',
+    //   views: '210K views',
+    //   date: '1 week ago',
+    //   videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
+    // },
+    // {
+    //   id: '6',
+    //   thumbnail: { uri: 'https://images.pexels.com/photos/12795/pexels-photo-12795.jpeg' }, // Use object with uri key
+    //   title: 'Everything you should know about F1',
+    //   channel: 'Dark Blues Music',
+    //   views: '170K views',
+    //   date: '2 weeks ago',
+    //   videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+    // },
   ];
   
